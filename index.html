@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>김민서(유진) 사건 — 증거 위키 & 형법 주장 가이드</title>
+  <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --bg-elevated: #334155;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --border-color: #334155;
+      --def-color: #38bdf8;
+      --def-bg: rgba(56, 189, 248, 0.12);
+      --def-border: rgba(56, 189, 248, 0.35);
+      --pros-color: #fb7185;
+      --pros-bg: rgba(251, 113, 133, 0.12);
+      --pros-border: rgba(251, 113, 133, 0.35);
+      --accent-gold: #fbbf24;
+      --accent-green: #34d399;
+      --accent-purple: #c084fc;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --font-scale: 1;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-size: calc(14px * var(--font-scale));
+      line-height: 1.55;
+      padding-top: calc(var(--safe-top) + 118px);
+      padding-bottom: calc(var(--safe-bottom) + 76px);
+      overflow-x: hidden;
+    }
+
+    /* 상단 헤더 및 해상도 표시줄 */
+    .top-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: calc(var(--safe-top) + 8px) 14px 10px;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .app-title {
+      font-size: calc(16px * var(--font-scale));
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .res-badge {
+      font-size: 11px;
+      color: var(--accent-gold);
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+
+    /* 역할 전환 토글 (통합 / 변호사 / 검사) */
+    .role-switcher {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--bg-card);
+      border-radius: 10px;
+      padding: 3px;
+      border: 1px solid var(--border-color);
+      gap: 4px;
+    }
+
+    .role-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      font-size: calc(12.5px * var(--font-scale));
+      font-weight: 700;
+      padding: 7px 4px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .role-btn.active[data-role="both"] {
+      background: var(--bg-elevated);
+      color: #fff;
+    }
+
+    .role-btn.active[data-role="defense"] {
+      background: rgba(56, 189, 248, 0.22);
+      color: var(--def-color);
+      box-shadow: inset 0 0 0 1px var(--def-border);
+    }
+
+    .role-btn.active[data-role="prosecutor"] {
+      background: rgba(251, 113, 133, 0.22);
+      color: var(--pros-color);
+      box-shadow: inset 0 0 0 1px var(--pros-border);
+    }
+
+    /* 컨테이너 레이아웃 */
+    .container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 14px;
+    }
+
+    /* 검색 및 필터 영역 */
+    .search-box {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 11px 38px 11px 38px;
+      border-radius: 12px;
+      font-size: calc(14px * var(--font-scale));
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-gold);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-sub);
+      font-size: 15px;
+    }
+
+    .clear-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      border: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      font-size: 12px;
+      cursor: pointer;
+      display: none;
+    }
+
+    /* 가로 스크롤 칩 필터 */
+    .chip-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 6px;
+      scrollbar-width: none;
+    }
+    .chip-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-sub);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: calc(12px * var(--font-scale));
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .chip.active {
+      background: var(--accent-gold);
+      color: #0f172a;
+      border-color: var(--accent-gold);
+      font-weight: 800;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-sub);
+      margin: 8px 0 12px;
+    }
+
+    /* 증거 위키 카드 */
+    .wiki-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: transform 0.15s ease;
+    }
+
+    .wiki-card-header {
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .wiki-title-group {
+      flex: 1;
+    }
+
+    .badge-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+
+    .loc-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      background: var(--bg-elevated);
+      color: #e2e8f0;
+    }
+
+    .issue-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      background: rgba(192, 132, 252, 0.16);
+      color: var(--accent-purple);
+      border: 1px solid rgba(192, 132, 252, 0.35);
+      cursor: pointer;
+    }
+
+    .wiki-card-title {
+      font-size: calc(16px * var(--font-scale));
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .wiki-card-summary {
+      font-size: calc(13px * var(--font-scale));
+      color: var(--text-sub);
+    }
+
+    .toggle-arrow {
+      font-size: 14px;
+      color: var(--text-sub);
+      padding-top: 4px;
+      transition: transform 0.2s ease;
+    }
+
+    .wiki-card.open .toggle-arrow {
+      transform: rotate(180deg);
+      color: var(--accent-gold);
+    }
+
+    .wiki-card-body {
+      display: none;
+      padding: 0 14px 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .wiki-card.open .wiki-card-body {
+      display: block;
+    }
+
+    .fact-box {
+      background: rgba(255, 255, 255, 0.04);
+      border-left: 3px solid var(--accent-gold);
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin: 12px 0;
+      font-size: calc(13px * var(--font-scale));
+    }
+
+    .fact-box strong {
+      color: var(--accent-gold);
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    @media (min-width: 640px) {
+      .role-grid.both-mode {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .strategy-panel {
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .strategy-panel.defense {
+      background: var(--def-bg);
+      border: 1px solid var(--def-border);
+    }
+
+    .strategy-panel.prosecutor {
+      background: var(--pros-bg);
+      border: 1px solid var(--pros-border);
+    }
+
+    .panel-header {
+      font-weight: 800;
+      font-size: calc(13.5px * var(--font-scale));
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-header.defense { color: var(--def-color); }
+    .panel-header.prosecutor { color: var(--pros-color); }
+
+    .strategy-list {
+      padding-left: 16px;
+      font-size: calc(13px * var(--font-scale));
+    }
+
+    .strategy-list li {
+      margin-bottom: 6px;
+    }
+
+    .law-box {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.15);
+      font-size: calc(12.5px * var(--font-scale));
+    }
+
+    .jump-guide-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      background: var(--bg-elevated);
+      color: var(--accent-gold);
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* 주장 가이드 페이지 스타일 */
+    .section-view {
+      display: none;
+    }
+    .section-view.active {
+      display: block;
+    }
+
+    .issue-nav-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .issue-tab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-sub);
+      padding: 9px 4px;
+      border-radius: 10px;
+      font-size: calc(12px * var(--font-scale));
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .issue-tab-btn.active {
+      background: rgba(192, 132, 252, 0.2);
+      color: #fff;
+      border-color: var(--accent-purple);
+    }
+
+    .guide-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 15px;
+      margin-bottom: 14px;
+    }
+
+    .guide-title {
+      font-size: calc(16px * var(--font-scale));
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: var(--accent-gold);
+    }
+
+    .quote-box {
+      background: rgba(15, 23, 42, 0.65);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      font-style: italic;
+      font-size: calc(12.5px * var(--font-scale));
+      border-left: 3px solid currentColor;
+    }
+
+    .evidence-link-chip {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      margin: 3px 4px 3px 0;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .evidence-link-chip:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    /* 테이블 스타일 */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: calc(12.5px * var(--font-scale));
+    }
+
+    .data-table th, .data-table td {
+      border: 1px solid var(--border-color);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .data-table th {
+      background: var(--bg-elevated);
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    /* 체크리스트 아이템 */
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      margin-bottom: 6px;
+      cursor: pointer;
+      font-size: calc(13px * var(--font-scale));
+    }
+
+    .check-item.checked {
+      opacity: 0.55;
+      text-decoration: line-through;
+    }
+
+    .check-box-ui {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--accent-gold);
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    /* 하단 네비게이션 바 */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-color);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 6px 8px calc(var(--safe-bottom) + 6px);
+    }
+
+    .nav-item {
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 4px 0;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+      color: var(--accent-gold);
+    }
+
+    .nav-icon {
+      font-size: 18px;
+    }
+
+    mark.hl {
+      background: var(--accent-gold);
+      color: #0f172a;
+      padding: 0 2px;
+      border-radius: 3px;
+      font-weight: 800;
+    }
+
+    /* ===== 추가 컴포넌트 ===== */
+    .panel-meaning { font-size: calc(13px * var(--font-scale)); font-weight: 700; margin-bottom: 8px; color: #e2e8f0; }
+    .warn-tag { font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 800; background: rgba(251,191,36,.15); color: var(--accent-gold); border: 1px solid rgba(251,191,36,.4); }
+    .note-box { background: rgba(251,191,36,.08); border: 1px dashed rgba(251,191,36,.5); color: #fde68a; border-radius: 8px; padding: 9px 11px; font-size: calc(12.5px * var(--font-scale)); margin: 10px 0; }
+    .note-box.big { margin: 0 0 14px; }
+    .jump-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .jump-row .jump-guide-btn { margin-top: 10px; }
+    .empty-box { text-align: center; color: var(--text-sub); padding: 36px 10px; border: 1px dashed var(--border-color); border-radius: 14px; }
+    .wiki-card.flash { box-shadow: 0 0 0 2px var(--accent-gold); }
+    .wiki-card-header:focus-visible, .check-item:focus-visible { outline: 2px solid var(--accent-gold); outline-offset: -2px; }
+    .chip.kw { background: transparent; border-style: dashed; }
+    .guide-hit { display: none; flex-wrap: wrap; gap: 6px; align-items: center; background: rgba(192,132,252,.08); border: 1px solid rgba(192,132,252,.3); border-radius: 10px; padding: 8px 10px; margin-bottom: 10px; }
+    .gh-label { font-size: 12px; font-weight: 800; color: var(--accent-purple); margin-right: 2px; }
+    .gh-chip { border: 1px solid; border-radius: 999px; padding: 4px 10px; font-size: 11.5px; font-weight: 700; cursor: pointer; background: transparent; }
+    .gh-chip.prosecutor { color: var(--pros-color); border-color: var(--pros-border); }
+    .gh-chip.defense { color: var(--def-color); border-color: var(--def-border); }
+    .guide-sub { font-size: calc(12.5px * var(--font-scale)); color: var(--text-sub); margin-bottom: 8px; }
+    .guide-title.sm { font-size: calc(14.5px * var(--font-scale)); margin-bottom: 10px; }
+    .law-line { font-size: calc(12px * var(--font-scale)); color: #e2e8f0; background: rgba(255,255,255,.05); border-radius: 8px; padding: 7px 10px; }
+    .goal-text { font-size: calc(13px * var(--font-scale)); margin-bottom: 10px; }
+    .flow-chain { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-bottom: 10px; }
+    .flow-chain span { background: rgba(255,255,255,.07); border-radius: 6px; padding: 3px 8px; font-size: 11.5px; font-weight: 700; }
+    .flow-chain i { font-style: normal; color: var(--text-sub); font-size: 12px; }
+    .sub-h { font-size: 11.5px; font-weight: 800; letter-spacing: .3px; color: var(--text-sub); margin: 12px 0 6px; text-transform: uppercase; }
+    .step-list { padding-left: 20px; font-size: calc(13px * var(--font-scale)); }
+    .step-list li { margin-bottom: 7px; padding-left: 2px; }
+    .step-list li::marker { font-weight: 800; }
+    .strategy-panel.prosecutor .step-list li::marker { color: var(--pros-color); }
+    .strategy-panel.defense .step-list li::marker { color: var(--def-color); }
+    .quote-box.prosecutor { color: #fecdd3; } .quote-box.defense { color: #bae6fd; }
+    .quote-box { margin-top: 12px; }
+    .mini-table { display: flex; flex-direction: column; gap: 6px; }
+    .mt-row { display: grid; grid-template-columns: 74px 1fr; gap: 2px 8px; background: rgba(15,23,42,.45); border-radius: 8px; padding: 7px 9px; font-size: 12px; }
+    .mt-row b { grid-row: span 2; color: var(--def-color); }
+    .mt-row em { font-style: normal; color: var(--text-sub); font-size: 11.5px; }
+    .stage-row { border-top: 1px solid rgba(255,255,255,.06); padding: 10px 0; display: flex; flex-direction: column; gap: 6px; }
+    .stage-row:first-of-type { border-top: none; padding-top: 0; }
+    .stage-name { align-self: flex-start; background: rgba(192,132,252,.16); color: #e9d5ff; border: 1px solid rgba(192,132,252,.35); border-radius: 6px; font-weight: 800; font-size: 12.5px; padding: 3px 9px; cursor: pointer; }
+    .stage-side, .clash-side { font-size: calc(12.5px * var(--font-scale)); border-radius: 8px; padding: 7px 10px; }
+    .stage-side b, .clash-side b, .rb-block b { display: block; font-size: 11px; margin-bottom: 2px; }
+    .stage-side.prosecutor, .clash-side.prosecutor, .rb-block.prosecutor { background: var(--pros-bg); } 
+    .stage-side.defense, .clash-side.defense, .rb-block.defense { background: var(--def-bg); }
+    .stage-side.prosecutor b, .clash-side.prosecutor b, .rb-block.prosecutor b { color: var(--pros-color); }
+    .stage-side.defense b, .clash-side.defense b, .rb-block.defense b { color: var(--def-color); }
+    .stage-law { font-size: 11.5px; color: var(--text-sub); }
+    .clash-item { padding: 10px 0; border-top: 1px solid rgba(255,255,255,.06); }
+    .clash-item:first-of-type { border-top: none; padding-top: 0; }
+    .clash-q { font-weight: 800; font-size: calc(13.5px * var(--font-scale)); margin-bottom: 6px; }
+    .clash-grid { display: grid; gap: 6px; }
+    @media (min-width: 560px) { .clash-grid.both-mode { grid-template-columns: 1fr 1fr; } }
+    .rebuttal-item, .conflict-item { background: rgba(15,23,42,.45); border-radius: 10px; padding: 11px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 7px; }
+    .rb-head, .cf-head { display: flex; align-items: center; gap: 8px; }
+    .rb-num { width: 22px; height: 22px; border-radius: 50%; background: var(--bg-elevated); display: inline-flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 800; flex-shrink: 0; }
+    .rb-block { border-radius: 8px; padding: 8px 10px; font-size: calc(13px * var(--font-scale)); }
+    .rb-block small { display: block; margin-top: 4px; color: var(--text-sub); font-size: 11.5px; }
+    .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+    .seg-btn { border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-sub); border-radius: 8px; padding: 8px 4px; font-weight: 800; font-size: 12.5px; cursor: pointer; }
+    .seg-btn.prosecutor.active { color: var(--pros-color); border-color: var(--pros-border); background: var(--pros-bg); }
+    .seg-btn.defense.active { color: var(--def-color); border-color: var(--def-border); background: var(--def-bg); }
+    .builder-step { background: rgba(15,23,42,.45); border-radius: 10px; padding: 10px 11px; margin-bottom: 8px; font-size: calc(13px * var(--font-scale)); }
+    .builder-step.off { opacity: .45; }
+    .builder-step p { margin: 6px 0 4px; }
+    .bs-head { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .bs-head input { width: 17px; height: 17px; accent-color: var(--accent-gold); }
+    .bs-num { color: var(--accent-gold); font-weight: 800; }
+    .copy-btn { width: 100%; margin-top: 4px; background: var(--accent-gold); color: #0f172a; border: none; border-radius: 10px; padding: 11px; font-weight: 800; font-size: 13px; cursor: pointer; }
+    .check-group { margin-bottom: 12px; }
+    .check-count { font-size: 12px; color: var(--text-sub); }
+    .reset-link { background: none; border: none; color: var(--text-sub); font-size: 12px; cursor: pointer; padding: 4px 0; }
+    .cf-ab { display: grid; gap: 6px; }
+    .cf-ab div { background: rgba(255,255,255,.04); border-radius: 8px; padding: 7px 10px; font-size: calc(12.5px * var(--font-scale)); }
+    .cf-ab em { display: block; font-style: normal; font-size: 11px; font-weight: 800; color: var(--accent-gold); margin-bottom: 2px; }
+    @media (min-width: 560px) { .cf-ab { grid-template-columns: 1fr 1fr; } }
+    .cf-impact { font-size: calc(12.5px * var(--font-scale)); color: #fecdd3; }
+    .app-toast { position: fixed; left: 50%; bottom: calc(var(--safe-bottom) + 84px); transform: translateX(-50%); background: #020617; border: 1px solid var(--border-color); color: #fff; padding: 9px 14px; border-radius: 10px; font-size: 12.5px; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .app-toast.show { opacity: 1; }
+    button { font-family: inherit; }
+  </style>
+</head>
+<body>
+
+  <!-- 상단 고정 헤더 -->
+  <header class="top-header">
+    <div class="header-row">
+      <div class="app-title">
+        <span>⚖️ 김민서 사건 증거 위키</span>
+      </div>
+      <div id="resBadge" class="res-badge">해상도 감지 중...</div>
+    </div>
+    <div class="role-switcher">
+      <button class="role-btn active" data-role="both" onclick="setRoleMode('both')">⚖️ 통합 비교</button>
+      <button class="role-btn" data-role="defense" onclick="setRoleMode('defense')">🛡️ 변호사 전략</button>
+      <button class="role-btn" data-role="prosecutor" onclick="setRoleMode('prosecutor')">⚔️ 검사 전략</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 탭 1: 증거 위키 -->
+    <section id="view-wiki" class="section-view active">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="wikiSearch" class="search-input" placeholder="증거명, 법조문(제21조), 판례(2000도228), 키워드 검색..." oninput="renderWiki()" />
+        <button id="clearSearchBtn" class="clear-btn" onclick="clearSearch()">✕</button>
+      </div>
+
+      <div class="chip-row" id="quickKwRow" aria-label="자주 찾는 키워드"></div>
+      <div class="guide-hit" id="guideHitBox"></div>
+
+      <!-- 장소 필터 -->
+      <div class="chip-row" id="locFilterRow">
+        <button class="chip active" data-loc="ALL" onclick="setLocFilter('ALL')">전체 (27)</button>
+        <button class="chip" data-loc="민서의 방" onclick="setLocFilter('민서의 방')">🏠 민서의 방 (10)</button>
+        <button class="chip" data-loc="교실" onclick="setLocFilter('교실')">🏫 교실 (8)</button>
+        <button class="chip" data-loc="사건 현장" onclick="setLocFilter('사건 현장')">🚧 사건 현장 (4)</button>
+        <button class="chip" data-loc="CCTV실" onclick="setLocFilter('CCTV실')">📹 CCTV실 (2)</button>
+        <button class="chip" data-loc="증인" onclick="setLocFilter('증인')">🎙️ 증인 3인 (3)</button>
+      </div>
+
+      <!-- 쟁점 필터 -->
+      <div class="chip-row" id="issueFilterRow">
+        <button class="chip active" data-issue="ALL" onclick="setIssueFilter('ALL')">전체 쟁점</button>
+        <button class="chip" data-issue="전제" onclick="setIssueFilter('전제')">전제: 행위자 특정</button>
+        <button class="chip" data-issue="쟁점1" onclick="setIssueFilter('쟁점1')">쟁점① 살인의 고의(구성요건)</button>
+        <button class="chip" data-issue="쟁점2" onclick="setIssueFilter('쟁점2')">쟁점② 정당방위·싸움(위법성)</button>
+        <button class="chip" data-issue="쟁점3" onclick="setIssueFilter('쟁점3')">쟁점③ 심신장애·원자행(책임)</button>
+      </div>
+
+      <div class="status-bar">
+        <span id="resultCountText">총 27개 항목 표시 중</span>
+        <span style="cursor:pointer; color:var(--accent-gold);" onclick="toggleAllCards()">전체 펼치기/접기</span>
+      </div>
+
+      <div id="wikiListContainer"></div>
+    </section>
+
+    <!-- 탭 2: 쟁점별 주장 가이드 -->
+    <section id="view-guide" class="section-view">
+      <div class="issue-nav-tabs">
+        <button class="issue-tab-btn active" data-itab="overview" onclick="setIssueTab('overview')">전체 전략</button>
+        <button class="issue-tab-btn" data-itab="issue1" onclick="setIssueTab('issue1')">① 구성요건<br>(살인 고의)</button>
+        <button class="issue-tab-btn" data-itab="issue2" onclick="setIssueTab('issue2')">② 위법성<br>(정당방위)</button>
+        <button class="issue-tab-btn" data-itab="issue3" onclick="setIssueTab('issue3')">③ 책임<br>(원자행)</button>
+      </div>
+
+      <div id="issueGuideContainer"></div>
+    </section>
+
+    <!-- 탭 3: 실전 공방 & 최종 변론/논고 -->
+    <section id="view-rebuttal" class="section-view">
+      <div class="guide-card">
+        <div class="guide-title">⚔️ 핵심 쟁점 10대 예상 반론 vs 재반박</div>
+        <p style="font-size:12.5px; color:var(--text-sub); margin-bottom:10px;">
+          변호인의 3대 핵심 방어("유진이 한 일이다", "AI 말을 믿었다", "목이 졸리는 방어 상황이었다")와 각 세부 쟁점별 공방 구조입니다.
+        </p>
+        <div id="rebuttalListContainer"></div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-title">🏛️ 최종 변론(변호사) vs 최종 논고(검사) 빌더</div>
+        <div id="closingBuilderContainer"></div>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-title">✅ 양측 튜터 증거 분석 체크리스트 (터치하여 점검)</div>
+        <div id="checklistContainer"></div>
+      </div>
+    </section>
+
+    <!-- 탭 4: 자료 간 모순점 & 팩트체크 -->
+    <section id="view-conflicts" class="section-view">
+      <div class="guide-card">
+        <div class="guide-title">⚠️ 원본 자료 간 어긋나는 7대 핵심 포인트</div>
+        <p style="font-size:12.5px; color:var(--text-sub); margin-bottom:10px;">
+          원본 증거와 롤카드·사건 개요 사이에 어긋나는 7곳입니다. 위쪽일수록 재판 공방에 미치는 영향이 크므로 상대방의 허점을 찌르거나 방어할 때 즉시 활용하세요.
+        </p>
+        <div id="conflictListContainer"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 하단 고정 네비게이션 바 -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-view="wiki" onclick="switchView('wiki')">
+      <span class="nav-icon">📚</span>
+      <span>증거 위키</span>
+    </button>
+    <button class="nav-item" data-view="guide" onclick="switchView('guide')">
+      <span class="nav-icon">🧭</span>
+      <span>주장 가이드</span>
+    </button>
+    <button class="nav-item" data-view="rebuttal" onclick="switchView('rebuttal')">
+      <span class="nav-icon">⚔️</span>
+      <span>공방·체크</span>
+    </button>
+    <button class="nav-item" data-view="conflicts" onclick="switchView('conflicts')">
+      <span class="nav-icon">⚠️</span>
+      <span>자료 모순(7)</span>
+    </button>
+  </nav>
+
+  <script>
+    /******************************************************************
+     * 1. 스마트폰 해상도 자동 감지 및 반응형 스케일링 엔진
+     ******************************************************************/
+    function updateResolutionAdaptation() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const dpr = window.devicePixelRatio ? window.devicePixelRatio.toFixed(1) : '1.0';
+      const badge = document.getElementById('resBadge');
+
+      let deviceLabel = '모바일';
+      let scale = 1;
+      if (w < 360) {
+        deviceLabel = '소형폰';
+        scale = 0.94;
+      } else if (w <= 430) {
+        deviceLabel = '표준 스마트폰';
+        scale = 1.0;
+      } else if (w <= 768) {
+        deviceLabel = '대화면/폴더블';
+        scale = 1.04;
+      } else {
+        deviceLabel = '태블릿/데스크톱';
+        scale = 1.06;
+      }
+
+      document.documentElement.style.setProperty('--font-scale', scale);
+      badge.textContent = `${deviceLabel} ${w}×${h} (@${dpr}x)`;
+    }
+
+    window.addEventListener('resize', updateResolutionAdaptation);
+    window.addEventListener('orientationchange', updateResolutionAdaptation);
+
+    /******************************************************************
+     * 2. 증거 위키 데이터베이스 (증거 23개 + 증인 3명)
+     ******************************************************************/
+    const WIKI_DATA = [
+      {
+        id: 'ev-1',
+        title: '1. 노트북 (검색 기록 & 종합)',
+        location: '민서의 방',
+        issues: ['전제', '쟁점1', '쟁점3'],
+        summary: '유진의 방송 채널, 병원 검색 기록, GPT 대화 기록이 남아 있는 핵심 디지털 증거',
+        rawFact: '노트북 내에 파프리카TV 방송 채널(유진세), 왕정신병원 검색 결과, 약물 중단 관련 GPT 대화 기록, 한구독 댓글 및 후원 내역이 저장되어 있음.',
+        defense: {
+          meaning: '민서가 사건 이전부터 자신의 이상 증상을 어떻게 인식하고 고민했는지, 약물 중단을 결정하게 된 경위를 파악하는 자료.',
+          points: [
+            '민서가 자신의 정신적 상태와 치료에 관심을 가지고 깊이 고민하고 있었음을 입증.',
+            '의사의 지시와 다른 선택(단약)을 하게 된 심리적 경위를 설명.',
+            '주의: 검색 기록이 곧 실제 의학적 진단을 의미하지는 않으며, 사건 이전의 인식 상태가 사건 당시에도 그대로 유지되었다고 단정할 수 없음.'
+          ],
+          law: '형법 제10조(심신장애) 기초 자료 / 살인의 고의(사건 당시 통제 가능성 검토)'
+        },
+        prosecutor: {
+          meaning: '행위자 특정(유진세=김민서)부터 단약의 자의성·예견가능성까지 연결하는 허브 증거.',
+          points: [
+            '방송 채널·후원 계좌·GPT 대화 기록을 결합해 피고인이 자신의 진단 의미를 정확히 알면서도 스스로 단약했음을 입증.',
+            '차분하게 정보를 검색하고 대안을 고른 과정 자체가 원인행위(단약) 당시 책임능력이 온전했다는 증거.'
+          ],
+          law: '형법 제10조 제3항(원인에 있어서 자유로운 행위) / 대법원 92도999'
+        }
+      },
+      {
+        id: 'ev-2',
+        title: '2. 유진의 방송 채널 (파프리카TV 유진세 위키)',
+        location: '민서의 방',
+        issues: ['전제', '쟁점1', '쟁점3'],
+        summary: '과격·폭력적 방송 스타일, 신상 비공개 원칙, 런닝 차림 자전거 방송 기록',
+        rawFact: '파프리카TV 채널명 "유진세". 위키상 욕설·고성·물건 던지기·시비로 몸싸움 직전까지 간 일 및 플랫폼 경고 이력 기재. 학교·거주지를 밝히지 않는 "신상 비공개 원칙" 고수. 공원에서 런닝 차림으로 자전거를 타던 방송에 역대 최다 시청자 몰림.',
+        defense: {
+          meaning: '유진이 인터넷 방송을 통해 민서와 구별되는 독립적인 활동을 했다는 사실을 보여주는 자료.',
+          points: [
+            '방송 속 유진의 거친 말투·행동·감정 표현을 평소 내향적인 민서와 대비시켜 두 인격의 뚜렷한 차이를 입증.',
+            '유진이 지훈에 대한 적대감을 표현했더라도, 그것이 곧 살인의 고의를 증명하는 것은 아니라고 분리 방어.',
+            '주의: 인격이 구분되어 있다는 사실만으로 심신상실·심신미약이 자동 인정되지는 않으므로 의학적 소견과 결합 필수.'
+          ],
+          law: '형법 제10조(심신장애 참고 자료) / 살인의 고의 방어(적대감 ≠ 살해 의도)'
+        },
+        prosecutor: {
+          meaning: '피고인에게 드러나면 안 되는 비밀이 있었고(살해 동기), 유진 상태의 위험성이 실재했음을 입증.',
+          points: [
+            '신상 비공개 원칙: 정체가 드러나는 것을 극도로 꺼렸다는 살해 동기의 핵심 근거.',
+            '런닝 차림 자전거 방송: 지훈이 10. 15. 단톡방에 유포한 사진의 원본임을 입증(위키 대목 + 단톡방 사진 + 개인톡 캡처 나란히 제시).',
+            '활용 주의: 거친 방송 행태를 단순 성향 증거로 쓰지 말고, 민서가 일기장에 "위태로워 보여서 무서워"라고 쓴 대상이 실재했다는 맥락(쟁점③ 예견가능성)으로 활용.'
+          ],
+          law: '살인죄 범행 동기(제250조) / 위험의 구체적 예견(제10조 제3항)'
+        }
+      },
+      {
+        id: 'ev-3',
+        title: '3. 한구독의 댓글 (노트북)',
+        location: '민서의 방',
+        issues: ['전제', '쟁점3'],
+        summary: '유진세 방송을 반복 시청·후원한 열혈 시청자(증인 2)의 댓글 기록',
+        rawFact: '유진세 방송에 반복적으로 등장하는 애청자(증인 2 한구독)의 댓글 기록.',
+        defense: {
+          meaning: '유진의 존재와 평소 민서와 다른 행동 양상을 뒷받침하는 외부인의 관찰 자료.',
+          points: [
+            '민서와 유진의 차이를 외부인이 인식할 수 있을 만큼 인격 전환 양상이 뚜렷했음을 보조 입증.',
+            '한구독이 직접 경험(시청)한 사실과 방송을 통해 단순 추측한 사실을 엄격히 구분하여 신빙성 통제.'
+          ],
+          law: '증거의 신빙성 구분 / 형법 제10조(심신장애 간접 관찰 자료)'
+        },
+        prosecutor: {
+          meaning: '유진세 채널이 실제 운영되었고 방송 속 유진이 거친 언행을 보였음을 확인하는 연결 고리.',
+          points: [
+            '후원 사실 확인서와 연결해 "유진세 = 김민서"를 확정.',
+            '방송에서 직접 본 거친 말투와 강한 자기표현만 진술하게 유도.',
+            '신문 금기: "실제로 해칠 사람이었나?", "살인의 고의를 추정할 수 있나?"는 절대 질문 금지(롤카드상 "방송만 보고 판단할 수 없다"고 답하게 되어 있어 변호인에게 유리해짐).'
+          ],
+          law: '행위자 특정(전제) / 증인 진술 신빙성 보강'
+        }
+      },
+      {
+        id: 'ev-4',
+        title: '4. 후원 관련 기록 (라파은행 거래내역 확인서)',
+        location: '민서의 방',
+        issues: ['전제'],
+        summary: '예금주 김민서 계좌로 한구독이 1만 원씩 5회(합계 5만 원) 후원한 객관적 금융 자료',
+        rawFact: '라파은행(110-123-456789), 예금주: 김민서. 2026. 10. 2.부터 10. 30.까지 매주 "한구독 → 김민서 후원금" 1만 원씩 총 5회(합계 5만 원) 입금 확인. 위키에도 "도네이션을 받는 계좌로 인하여 본명이 공개"됐다고 기재.',
+        defense: {
+          meaning: '유진의 방송 활동이 단순 가상이 아니라 현실 금전 거래와 연결된 활동임을 보여주는 자료.',
+          points: [
+            '한구독이 실제 후원자라는 사실을 뒷받침하되, 후원 기록만으로 사건 당시 민서(유진)의 정신 상태나 살인의 고의를 직접 증명할 수는 없다고 한계 지적.'
+          ],
+          law: '증거의 입증 범위 제한(행위자 연결 자료일 뿐 고의·책임 직접 증거 아님)'
+        },
+        prosecutor: {
+          meaning: '유진세 채널 운영자 = 피고인 김민서임을 100% 고정하는 객관적 물증.',
+          points: [
+            '위키의 "도네이션 계좌로 본명 공개" 기재 및 한구독 증언과 맞물려 유진세 = 김민서를 반박 불가능하게 고정.',
+            '제시·신문 순서: 거래내역 확인서 제시 → 한구독("후원한 채널이 유진세 채널인가") → 왕치료("유진은 민서에게 나타나는 다른 정체감 상태인가") 순서로 연결.'
+          ],
+          law: '전제 사실(행위자 동일성) 확정'
+        }
+      },
+      {
+        id: 'ev-5',
+        title: '5. 약·약국 봉투 & 달력',
+        location: '민서의 방',
+        issues: ['쟁점3'],
+        summary: '한빛약국 약봉투·남은 약, 그리고 사건 전 3주 동안 복약 표시(동그라미)가 끊긴 달력',
+        rawFact: '책상 위에 한빛약국 약봉투와 처방약이 남아 있음. 방 안 달력에는 사건일(10. 22.) 기준 약 3주 전부터 복약 표시(동그라미)가 전혀 없음.',
+        defense: {
+          meaning: '민서가 정신건강 관련 약물 치료를 실제로 받고 있었으며, 단약 이후 증상 악화가 나타났음을 입증하는 자료.',
+          points: [
+            '약의 정확한 이름·처방 목적·복용량을 담당 의사(왕치료) 진술과 연결하여 중증 정신질환 치료 이력 입증.',
+            '약물 중단 시점과 이후 나타난 기억 공백·인격 전환 증상 사이의 의학적 관련성을 부각하여 사건 당시 사물변별·의사결정능력 결여(심신상실/미약) 주장.'
+          ],
+          law: '형법 제10조 제1항·제2항(심신상실·심신미약)'
+        },
+        prosecutor: {
+          meaning: '피고인이 처방약을 복용해 오다 사건 전 약 3주 동안 자의로 단약했음을 특정하는 유일한 물증.',
+          points: [
+            '약 이름 검색 결과로 "약을 끊으면 억제되던 증상이 돌아온다"는 위험의 내용을 구체적으로 특정.',
+            '달력의 동그라미가 끊긴 날짜를 사건일(10. 22.)과 맞춰 약 3주간의 단약 기간을 입증하고, 책상 위 남은 약으로 "처방받고도 스스로 먹지 않았다"는 자의성 입증.',
+            '제시 순서: 달력 → 약봉투 → 약 검색 결과 → 왕치료 증언 순으로 연결.'
+          ],
+          law: '형법 제10조 제3항(원인에 있어서 자유로운 행위 — 자의적 단약)'
+        }
+      },
+      {
+        id: 'ev-6',
+        title: '6. 병원 지도',
+        location: '민서의 방',
+        issues: ['쟁점3'],
+        summary: '약국 위치와 주변 정신건강의학과 병원 위치를 연결해 치료 경로를 파악하는 자료',
+        rawFact: '약봉투에 적힌 약국과 주변 관련 진료과 병원(왕정신병원)의 위치가 표시된 지도.',
+        defense: {
+          meaning: '민서가 실제 의료기관에서 전문적인 정신과 치료를 받았음을 보여주는 기초 자료.',
+          points: [
+            '병원 검색 결과 및 주치의 왕치료의 진술과 결합하여 민서의 질환이 허구가 아님을 입증.'
+          ],
+          law: '형법 제10조(심신장애 치료 경로 입증)'
+        },
+        prosecutor: {
+          meaning: '약국 봉투와 왕정신병원(왕치료)을 잇는 연결 증거.',
+          points: [
+            '피고인이 오랫동안 전문 병원을 다니며 자신의 진단명과 치료 목적을 충분히 설명 들었음을 입증하는 징검다리 자료.'
+          ],
+          law: '형법 제10조 제3항(자기 질환 및 위험성에 대한 인식)'
+        }
+      },
+      {
+        id: 'ev-7',
+        title: '7. 병원 검색 결과 (왕정신병원 왕치료)',
+        location: '민서의 방',
+        issues: ['전제', '쟁점3'],
+        summary: '왕정신병원 정신건강의학과 전문의 왕치료(증인 3) 정보 확인 자료',
+        rawFact: '노트북 병원 검색 결과: 왕정신병원 정신건강의학과 담당 의사 왕치료(증인 3). 중1 증상 시작, 중3부터 상담·약물치료 담당.',
+        defense: {
+          meaning: '담당 전문의(왕치료)를 특정하여 민서의 치료 이력과 정신적 상태에 관한 전문가 증언을 이끌어내는 자료.',
+          points: [
+            '왕치료의 전문 분야를 확인하고, 약물 중단 시 발생할 수 있는 기억 공백·인격 전환·통제력 저하에 대한 의학적 근거 확보.'
+          ],
+          law: '형법 제10조(심신장애에 관한 전문가 소견 연결)'
+        },
+        prosecutor: {
+          meaning: '피고인의 주치의를 특정하여 "진단 설명 완료", "단약 무허락", "기억공백 ≠ 판단능력 상실"을 받아내는 기반.',
+          points: [
+            '왕치료 신문을 통해 ① 민서와 유진은 한 사람의 다른 정체감 상태, ② 민서에게 진단과 증상 원인을 이미 설명함, ③ 단약을 허락한 적 없음, ④ 사후 기억 공백과 행위 당시 판단·통제 능력은 별개임을 확인.'
+          ],
+          law: '행위자 특정 / 심신장애 부정 및 제10조 제3항(원자행) 입증'
+        }
+      },
+      {
+        id: 'ev-8',
+        title: '8. 일기장 (민서·유진 교대 기록)',
+        location: '민서의 방',
+        issues: ['쟁점1', '쟁점2', '쟁점3'],
+        summary: '유진의 살해 협박성 문구와 이를 읽고 두려워하며 말리는 민서의 답글이 교대로 적힌 핵심 증거',
+        rawFact: '[유진 기록] "지훈이 진짜 죽여버리고 싶네." / "얘가 이 세상에서 흔적도 없이 사라졌으면 좋겠어. 진짜 내 손으로 어떻게 해버리기 전에" / "한 번만 더 선 넘으면 나도 진짜 어떻게 돌변할지 몰라." / "내가 밖에서 방송하는 거 그 새끼가 어떻게 알아낸 거야? 반 톡방에 올렸다고… 개죽여버리고 싶네"\n[민서 기록] "너 도대체 요즘 밖에서 뭐하고 다니는 거야..? … 너무 위태로워 보여서 무서워." / "누굴 해치겠다느니 사라졌으면 좋겠다느니 하는 거… 제발 그러지 마."',
+        defense: {
+          meaning: '민서가 겪은 극심한 공포·혼란·기억 공백과 두 인격의 분리를 보여주는 내면 기록.',
+          points: [
+            '민서가 유진의 행동을 통제하지 못해 "너무 위태로워 보여서 무서워", "제발 그러지 마"라고 애원할 정도로 별개의 인격에 의해 지배당하고 있었음을 강조.',
+            '지훈과의 갈등으로 지속적인 공포와 압박을 느꼈던 심리적 배경 설명.',
+            '유진의 거친 표현은 분노의 감정 표현일 뿐 실제 치밀한 살해 계획을 뜻하는 것은 아니라고 방어.'
+          ],
+          law: '형법 제10조(심신장애 — 통제 불능 및 기억 공백) / 정당방위·과잉방위 배경'
+        },
+        prosecutor: {
+          meaning: '쟁점①(살인의 고의·동기)과 쟁점③(심신능력 존재 및 위험의 구체적 예견)을 동시에 입증하는 최강 증거.',
+          points: [
+            '쟁점① 살인의 고의: 유진은 범행 전부터 "죽여버리고 싶네", "내 손으로 어떻게 해버리기 전에"라며 지훈을 해칠 의사를 거듭 명시함.',
+            '쟁점③-1 심신능력 존재: 유진은 "걔가 내 눈앞에서 더 안 나대면… 한 번만 더 선 넘으면"이라고 조건까지 붙여 자기 판단을 기록함(사물변별·의사결정능력 존재).',
+            '쟁점③-2 위험의 구체적 예견: 민서는 유진이 남을 해칠 수 있다는 글을 직접 읽고 "누굴 해치겠다느니… 제발 그러지 마"라고 답장함. 막연한 건망증이 아니라 타인 살해·폭력 위험을 구체적으로 예견하고도(10. 15. 단톡방 유포 이후인 단약 기간 중) 약을 다시 먹지 않음!'
+          ],
+          law: '형법 제250조(살인의 고의) / 형법 제10조 제3항(원자행의 구체적 위험 예견가능성)'
+        }
+      },
+      {
+        id: 'ev-9',
+        title: '9. 쓰레기통 (찢어진 일기장 조각)',
+        location: '민서의 방',
+        issues: ['쟁점1', '쟁점3'],
+        summary: '쓰레기통에서 발견된 찢어진 일기장 페이지 조각',
+        rawFact: '민서의 방 쓰레기통 안에 찢겨 버려진 일기장 페이지 조각들이 들어 있음.',
+        defense: {
+          meaning: '삭제되거나 감추어진 기록을 복원해 민서의 극심한 정신적 혼란과 기억 공백을 입증하는 자료.',
+          points: [
+            '종이의 줄무늬와 찢어진 가장자리를 일기장과 대조해 동일성 확인.',
+            '일부 과격한 문장만 떼어내어 살인의 고의로 단정하지 말고, 앞뒤 문맥과 민서의 공포·혼란 맥락 전체를 봐야 한다고 주장.'
+          ],
+          law: '형법 제10조(심신장애) / 증거의 전체 맥락 해석 원칙'
+        },
+        prosecutor: {
+          meaning: '일기장의 결정적 대목(살해 언급 및 민서의 인지)을 복원하고 불리한 기록을 인멸하려 한 정황을 보여주는 증거.',
+          points: [
+            '쓰레기통 종이의 줄무늬·찢긴 단면을 일기장 본체와 먼저 맞춰 동일한 일기장임을 입증.',
+            '복원된 문장이 유진의 살해 협박인지, 누가 왜 찢었는지 추궁하여 범행 인식 및 증거인멸 정황으로 활용.'
+          ],
+          law: '형법 제250조(살인의 고의) / 형법 제10조 제3항(원자행)'
+        }
+      },
+      {
+        id: 'ev-10',
+        title: '10. GPT 대화 기록 (「요즘 괜찮아진 것 같은데」)',
+        location: '민서의 방',
+        issues: ['쟁점3'],
+        summary: '민서의 4회 질문에 대해 GPT가 4회 모두 임의 단약을 만류한 원문 기록',
+        rawFact: '[1차] 민서: 약 때문에 멍해 수업이 힘들다, 요즘 괜찮은 것 같다 → GPT: 임의로 중단하기보다 처방한 선생님과 조정을 상의하라(1차 만류)\n[2차] 민서: 기억 못 하는 동안 한 일을 나중에 알게 됐다. "왜 그런지는 병원에서 설명 들어서 알고 있어." 친구가 평소와 다르게 말했다고 한 적도 있다 → GPT: 지금 안정적인 것과 치료 없이 유지되는 것은 별개다(2차 만류)\n[3차] 민서: "나도 내가 진단받은 게 그냥 건망증 같은 건 아니라는 건 알아." 약 안 먹어도 바로 예전처럼 되는 건 아니지? → GPT: 단정할 수 없지만 중단해도 안전하다는 뜻은 아니다. 일기장으로 파악하는 것과 그 순간 조절하는 것은 다르다(3차 만류)\n[4차] 민서: "조금 안심되네." 당장 병원 갈 시간은 없으니 며칠 상태를 일기장에 적어보면 어떨까? → GPT: 일기장 기록이 임의 중단을 허락하는 뜻은 아니다. 병원에 먼저 연락하라(4차 만류)',
+        defense: {
+          meaning: '민서가 범행을 준비하기 위해서가 아니라 약의 부작용(수업 중 멍함) 때문에 고민하다 단약에 이른 과정을 보여주는 자료.',
+          points: [
+            '단약의 동기가 학업 어려움(멍함)과 상태 호전에 대한 착각("요즘 괜찮아진 것 같은데")이었음을 강조.',
+            'GPT의 "단정할 수 없지만"이라는 문구를 보고 "꼭 그렇게 정해진 건 아니라니까 조금 안심되네"라며 일기장으로 자가 점검하려 했던 미성숙한 판단 과정을 부각하여 위험 예견가능성을 부정.'
+          ],
+          law: '형법 제10조 제3항 부정(과실에 의한 원자행의 예견가능성 부정)'
+        },
+        prosecutor: {
+          meaning: '피고인이 자기 진단의 무게를 정확히 알면서도 AI의 4차례 만류를 모두 거스르고 자의로 단약했음을 입증하는 결정적 증거.',
+          points: [
+            '"왜 그런지는 병원에서 설명 들어서 알고 있어", "그냥 건망증 같은 건 아니라는 건 알아"라는 두 문장을 먼저 낭독해 자기 질환 인식을 입증.',
+            'GPT는 한 번도 약을 끊으라고 한 적이 없으며 4번 모두 임의 중단을 만류함. 피고인은 "단정할 수 없다"는 한 구절만 임의로 골라 듣고 의사 상담 없이 단약함(자의성 + 예견가능성 확립).',
+            '주의: 왕치료 롤카드에는 "AI의 약을 끊어도 된다는 취지의 답변을 믿고"라고 잘못 적혀 있으므로, 반드시 GPT 대화 원문 기록을 제시하며 반박할 것!'
+          ],
+          law: '형법 제10조 제3항(원인에 있어서 자유로운 행위) / 대법원 92도999'
+        }
+      },
+      {
+        id: 'ev-11',
+        title: '11. ADR(분쟁조정) 자료',
+        location: '교실',
+        issues: ['쟁점1', '쟁점2'],
+        summary: '민서와 지훈 사이의 사건 이전 금전 갈등 및 조정 절차 기록',
+        rawFact: '변호인 가이드 기준: 민서와 지훈이 사건 이전 금전 문제로 갈등을 겪었고, 이를 해결하기 위해 조정(ADR) 절차를 진행함. 차용 경위·합의 내용·합의 이행 여부는 원본 자료에서 확인해야 함.',
+        note: '변호인 증거 가이드에만 나오는 증거입니다. 검사 측 증거 목록(원본 8종·물품 체크리스트 기준 21개)에는 없으므로, 실제 배부 증거인지 제작진에게 확인하세요.',
+        defense: {
+          meaning: '사건이 우발적 공격이 아니라 금전 문제에서 시작된 지훈의 부당한 태도와 누적된 갈등 배경 속에서 발생했음을 설명하는 자료.',
+          points: [
+            '지훈이 돈을 빌린 경위와 ADR 합의 불이행, 조정 이후 지훈의 적대적 태도 변화를 부각.',
+            '단, 금전 갈등 자체가 정당방위의 직접 근거는 아니므로 지훈과의 관계 맥락을 설명하는 배경 자료로 활용.'
+          ],
+          law: '사건의 경위 및 정당방위 배경 설명'
+        },
+        prosecutor: {
+          meaning: '오래전부터 누적된 금전 갈등이 사진 유포 사건과 결합해 강한 적의(살해 동기)로 발전했음을 보여주는 자료.',
+          points: [
+            '과거의 금전 갈등은 사건 당일 현재의 침해를 정당화하는 사유가 될 수 없으며, 오히려 피고인이 피해자에게 원한을 품게 된 동기 배경임을 지적.'
+          ],
+          law: '살인의 고의 판단 요소 중 범행 경위·동기(대법원 2000도2231)'
+        }
+      },
+      {
+        id: 'ev-12',
+        title: '12. 학폭위(학교폭력대책심의위원회) 자료',
+        location: '교실',
+        issues: ['쟁점1', '쟁점2', '쟁점3'],
+        summary: '민서의 학교폭력 피해 신고 및 학교 측의 심의·조치 기록',
+        rawFact: '변호인 가이드 기준: 민서가 학교폭력을 신고했고 학교가 이를 심의해 조치를 내린 기록. 신고 내용, 학교가 확인한 사실, 조치 내용을 구분해 읽어야 함.',
+        note: '변호인 증거 가이드에만 나오는 증거입니다. 검사 측 증거 목록(원본 8종·물품 체크리스트 기준 21개)에는 없으므로, 실제 배부 증거인지 제작진에게 확인하세요.',
+        defense: {
+          meaning: '학교폭력으로 인한 지속적인 스트레스와 공포가 민서의 정신 상태 악화 및 사건 당시 방어 심리에 미친 영향을 입증하는 자료.',
+          points: [
+            '조치 이후에도 지훈의 괴롭힘이 멈추지 않고 사진 유포 등으로 이어졌음을 다른 증거(단톡방, 사물함)와 결합해 입증.',
+            '민서가 지훈 앞에서는 극심한 공포와 위축을 느낄 수밖에 없었던 피해자였음을 강조하여 정당방위·과잉방위(제21조 제3항 공포·경악)의 배경으로 연결.'
+          ],
+          law: '형법 제21조 제2항·제3항(과잉방위 정황) / 형법 제10조(심리적 압박 누적)'
+        },
+        prosecutor: {
+          meaning: '과거의 학폭 기록이 사건 당일 밤의 선제적 물리력 행사나 벽돌 가격을 정당화할 수 없음을 구분하는 자료.',
+          points: [
+            '신고 내용, 학교가 실제 확인한 사실, 학교의 조치를 엄격히 구분.',
+            '과거의 괴롭힘 피해가 사건 당시의 "현재의 부당한 침해"를 대신할 수 없으며, 오히려 보복 동기로 작용했을 가능성을 지적.'
+          ],
+          law: '형법 제21조(정당방위의 현재성 요건 엄격 해석)'
+        }
+      },
+      {
+        id: 'ev-13',
+        title: '13. 민서의 사물함 & "런닝맨" 포스트잇',
+        location: '교실',
+        issues: ['쟁점1', '쟁점3'],
+        summary: '반 친구들이 민서를 조롱하며 사물함에 붙여둔 "런닝맨" 욕설 포스트잇과 메모들',
+        rawFact: '민서의 사물함에 반 친구들이 민서를 욕하고 "런닝맨"이라고 조롱하는 포스트잇들이 붙어 있음(응원 메모와 혼재).',
+        defense: {
+          meaning: '민서가 학교에서 공개적이고 지속적인 집단 조롱에 노출되어 극심한 심리적 압박을 겪었음을 보여주는 자료.',
+          points: [
+            '응원 메모와 조롱 메모를 구분하고, 사진 유포 이후 학교 전체에서 조롱당하며 정신적 한계에 내몰린 피해 상황을 부각.',
+            '다만 조롱에 대한 항의 목적이었을 뿐 살해 의도는 아니었음을 강조.'
+          ],
+          law: '범행 배경 및 형법 제10조(정신적 상태 악화 요인)'
+        },
+        prosecutor: {
+          meaning: '10. 15. 단톡방 사진 유포가 교실 내 오프라인 조롱으로 이어져 피고인의 분노가 폭발 직전까지 쌓였음을 보여주는 동기 증거.',
+          points: [
+            '포스트잇의 "런닝맨"이 10. 15. 21:47 학급 단톡방에서 처음 등장한 별명임을 연결.',
+            '사진 한 장이 지속적 모욕으로 이어져 유진 일기의 "개죽여버리고 싶네"라는 살해 동기로 직결되었음을 입증(이친구의 목격 진술과 연결).'
+          ],
+          law: '형법 제250조(살인의 고의 — 범행 경위와 동기 축적)'
+        }
+      },
+      {
+        id: 'ev-14',
+        title: '14. 친구(이친구)의 편지·쪽지와 응원 선물',
+        location: '교실',
+        issues: ['쟁점3'],
+        summary: '민서의 유일한 단짝 친구인 이친구(증인 1)가 건넨 응원 쪽지와 선물',
+        rawFact: '교실의 쪽지와 응원 선물. 작성자는 증인 1 이친구(물품 체크리스트·힌트 카드 기준). 편지의 구체적 문구는 원본에서 확인.',
+        defense: {
+          meaning: '가장 가까운 친구가 관찰한 민서의 평소 온순·내향적 성격과 최근의 급격한 정신적 변화를 보여주는 간접 증거.',
+          points: [
+            '평소 다툼조차 없던 소심한 민서가 단약 이후 본인의 의지와 무관하게 이상 행동을 보였음을 이친구의 증언과 연결해 심신장애 주장.'
+          ],
+          law: '형법 제10조(주변인이 관찰한 정신적 상태 변화)'
+        },
+        prosecutor: {
+          meaning: '작성자가 증인 1(이친구)임을 특정하고, 단약 기간 중 교실에서 나타난 폭력적 반응을 입증하는 연결 고리.',
+          points: [
+            '이친구를 증인으로 세워 단약 기간(사건 약 3주 전 이후) 중 교실에서 한 학생과 휴대전화 실랑이를 벌이다 상대 팔을 거칠게 쳐내고 의자를 밀어 넘어뜨린 폭력적 장면을 진술하게 함.',
+            'GPT 대화에서 민서가 "친구가 내가 평소랑 다르게 말했다고" 언급한 대목과 묶어, 피고인이 주변을 통해 자신의 위험한 변화를 충분히 인지할 수 있었음을 입증.'
+          ],
+          law: '형법 제10조 제3항(단약 기간 중 폭력성 발현 및 위험 인지)'
+        }
+      },
+      {
+        id: 'ev-15',
+        title: '15. 교사 일지 (학생 상담 기록지)',
+        location: '교실',
+        issues: ['쟁점3'],
+        summary: '2026. 9. 4. 담임 한담임이 작성한 상담 일지 — 단약 전 민서의 극내향적 성향과 유일한 교우관계 기록',
+        rawFact: '2026. 9. 4. 담임 한담임 상담 기록지. 민서는 "1학년 때부터 같은 반인 이친구와만 친하게 지내며" 다툼이 없고, 발표 때 목소리가 작아질 만큼 극도로 내향적·소심함. 교우관계 질문에 학생 진술은 "이친구면 돼요". (단, 학년·반이 "2학년 3반"으로 기재되어 있어 단톡방 "3학년 2반"과 차이 존재).',
+        defense: {
+          meaning: '교사가 객관적으로 관찰한 민서의 본래 성품(비폭력적·극내향적)과 사건 전후 이상 행동의 괴리를 보여주는 자료.',
+          points: [
+            '본래 다툼조차 없던 민서가 약물 중단 후 전혀 다른 인격(유진)의 지배로 평소와 완전히 다른 행동을 보였음을 입증.',
+            '주의: 교사는 행동을 관찰한 사람일 뿐 정신질환 진단 전문가가 아니므로 의학적 판단은 왕치료 진술과 결합.'
+          ],
+          law: '형법 제10조(평소 성품과 범행 당시 행동의 현저한 괴리)'
+        },
+        prosecutor: {
+          meaning: '① 단약 전(9월) 기준선 설정 및 ② 유일한 친구인 이친구 진술의 강력한 신빙성을 확립하는 증거.',
+          points: [
+            '기준선(Baseline) 논리: 단약 전인 9월 4일 기록에는 공격적 행동이 전혀 없음 → 교실에서의 폭력적 반응(팔 쳐내고 의자 넘어뜨림)은 10월 초 단약 기간에 처음 나타난 위험 신호임.',
+            '증인 신빙성 강화: 이친구는 민서가 "이친구면 돼요"라고 할 만큼 유일하고 가장 가까운 단짝임. 그런 단짝 친구가 민서에게 불리한 폭력 장면을 거짓으로 꾸며낼 이유가 없으므로 이친구 진술의 신빙성이 극대화됨.'
+          ],
+          law: '증인 진술의 신빙성 보강 / 형법 제10조 제3항(단약 후 폭력성 변화 입증)'
+        }
+      },
+      {
+        id: 'ev-16',
+        title: '16. 코코아톡 – 학급 단체 대화방 (3학년 2반 단톡방)',
+        location: '교실',
+        issues: ['전제', '쟁점1'],
+        summary: '10. 15. 21:46 지훈이 분홍색 자전거 사진을 올리고 21:47 "런닝맨" 조롱이 시작된 단톡방 기록',
+        rawFact: '「3학년 2반 단톡방」(28명). 2026. 10. 15.(목) 21:46 지훈: "야 이거 봐봐 ㅋㅋㅋㅋ" + 작은 분홍색 자전거를 타는 사진 게시. 21:47 최민준: "런닝맨 뭐냐"로 별명 첫 등장. 21:53까지 여러 학생이 웃으며 조롱했고 박서연만 "그만 좀 해"라고 만류함.',
+        defense: {
+          meaning: '지훈이 민서의 약점을 잡아 학급 전체에 유포하며 집단적 모욕과 사이버 불링을 가한 피해 증거.',
+          points: [
+            '지훈의 악의적인 사진 유포로 인해 민서가 극심한 수치심과 공포를 겪었음을 입증.',
+            '사건 당일 만남은 이러한 부당한 유포 행위에 대해 항의하거나 삭제를 요청하기 위한 것이었지 살해 계획이 아니었음을 주장.'
+          ],
+          law: '범행 배경 및 사전 살해 계획 부정'
+        },
+        prosecutor: {
+          meaning: '사적 추궁(21:32 개인톡) 12분 만에 공개 조롱(21:46 단톡방)으로 번진 타임라인을 보여주며 살해 동기를 확립하는 증거.',
+          points: [
+            '21:32 개인톡 → 21:46 단톡방 사진 유포 → 21:47 "런닝맨" 등장 → 사물함 포스트잇 → 유진 일기("반 톡방에 올렸다고… 개죽여버리고 싶네")를 한 줄의 타임라인으로 연결하여 강렬한 살해 동기를 입증.'
+          ],
+          law: '형법 제250조(살인의 고의 — 범행 동기 형성 과정)'
+        }
+      },
+      {
+        id: 'ev-17',
+        title: '17. 코코아톡 – 민서와 지훈의 개인 대화 (개인톡)',
+        location: '교실',
+        issues: ['전제', '쟁점1', '쟁점2'],
+        summary: '10. 15. 21:32~21:34 지훈이 파프리카TV 유진세 채널 캡처를 보내며 추궁한 개인 메시지',
+        rawFact: '2026. 10. 15.(목) 21:32~21:34. 지훈: "야" → "파프리카TV 보다가 찾았는데 ㅋㅋ" → 유진세 채널 자전거 영상 캡처 전송 → "이거 뭐냐 ㅋㅋ". 민서의 답장은 없음. (만날 장소·시각 약속 메시지는 포함되어 있지 않음).',
+        defense: {
+          meaning: '지훈이 먼저 민서의 비밀을 빌미로 압박·조롱했으며, 대화 어디에도 민서가 지훈을 해치겠다는 사전 계획이나 협박이 없음을 보여주는 자료.',
+          points: [
+            '민서의 답장이 없음 — 추궁에 대응하지 못하고 위축된 정황으로 설명할 수 있음.',
+            '사건 직전 대화에 살해 예고나 계획이 전혀 없으므로 계획적 살인 주장을 반박.'
+          ],
+          law: '형법 제250조(살인의 사전 고의 부재 입증)'
+        },
+        prosecutor: {
+          meaning: '피고인의 비밀(유진세 채널)이 지훈에게 발각된 정확한 시점(10. 15. 21:32)을 특정하는 증거.',
+          points: [
+            '일기장의 유진 글("내가 밖에서 방송하는 거 그 새끼가 어떻게 알아낸 거야?")과 완벽히 일치하여, 해당 살해 협박 일기가 10. 15. 이후(단약 기간 중)에 작성되었음을 고정.',
+            '주의: 개인톡 원문에는 만날 장소·시각 약속이 없으므로, 피고인이 만남을 주도했다는 점은 개인톡이 아니라 CCTV 첫 등장 장면(피고인이 지훈이 있던 PC방 공터로 찾아감)으로 입증할 것!'
+          ],
+          law: '행위자 특정(전제) / 살해 동기 시점 특정(제250조)'
+        }
+      },
+      {
+        id: 'ev-18',
+        title: '18. 부서진 휴대전화 (사건 현장)',
+        location: '사건 현장',
+        issues: ['쟁점2'],
+        summary: '뒷면 라벨지로 피해자(지훈) 소유임이 확인되는 파손된 스마트폰',
+        rawFact: '사건 현장 바닥에 떨어져 파손된 휴대전화. 뒷면 라벨지를 통해 소유자가 피해자 지훈임이 확인됨. 혈흔 및 벽돌과 일정 거리를 두고 떨어져 있음.',
+        defense: {
+          meaning: '현장에서 두 사람 사이에 급박한 신체적 충돌(몸싸움)이 있었음을 뒷받침하는 물증.',
+          points: [
+            '휴대전화가 떨어진 시점과 벽돌을 사용한 시점을 비교하여 몸싸움의 급박한 진행 순서를 설명.',
+            '휴대전화가 파손되었다는 사실만으로 민서가 먼저 일방적인 공격을 시작했다고 단정할 수 없다고 반박.'
+          ],
+          law: '형법 제21조(정당방위 — 신체적 충돌 상황의 재구성)'
+        },
+        prosecutor: {
+          meaning: '이 사건 몸싸움의 발단이 "비밀이 담긴 지훈의 휴대전화를 빼앗으려 한 피고인의 선제 행동"이었음을 보여주는 핵심 물증.',
+          points: [
+            '지훈이 10. 15. 개인톡으로 유진세 캡처를 보낸 바로 그 기기임.',
+            'CCTV 재확인 장면(휴대전화가 떨어지는 순간 두 사람의 손 위치)과 결합하여 피고인이 먼저 휴대전화를 빼앗으려 손을 뻗어 실랑이가 시작되었음을 입증 → 자초한 싸움이므로 정당방위·과잉방위 모두 불성립(대법원 2000도228).',
+            '휴대전화 파손 자체는 별도로 재물손괴죄(형법 제366조) 구성 가능.'
+          ],
+          law: '형법 제21조 부정(싸움 법리, 대법원 2000도228) / 형법 제366조(재물손괴)'
+        }
+      },
+      {
+        id: 'ev-19',
+        title: '19. 벽돌 (사건 현장)',
+        location: '사건 현장',
+        issues: ['쟁점1', '쟁점2'],
+        summary: '지훈의 머리를 가격한 범행 도구 — 표면 흔적 및 발견 위치 확인',
+        rawFact: '사건 현장에서 발견된 단단하고 무거운 벽돌. 표면 흔적 및 혈흔 감식 결과, CCTV 속 가격 물건과의 동일성 검토 대상.',
+        defense: {
+          meaning: '목이 졸리는 생명의 위협 속에서 눈앞의 위험을 즉각 벗어나기 위해 우연히 손에 잡힌 방어 수단.',
+          points: [
+            '사전에 준비해 간 흉기가 아니라 현장에서 급박하게 집어 든 물건임을 강조하여 계획적 살인 고의를 부정.',
+            '지훈이 먼저 목을 조르는 공격을 하던 중 침해를 즉시 중단시키려 사용했고, 사용 횟수가 1회에 그쳤다면(CCTV로 확인) 상대적 최소침해 원칙상 상당성이 인정된다고 주장(예비적으로 과잉방위).'
+          ],
+          law: '형법 제250조(살인 고의 부정) / 형법 제21조 제1항·제2항(정당방위·과잉방위)'
+        },
+        prosecutor: {
+          meaning: '사람의 생명을 앗아갈 수 있는 치명적 흉기이며, 이로써 급소인 머리를 가격해 미필적 살인 고의를 입증하는 핵심 물증.',
+          points: [
+            '단단하고 무거운 벽돌로 신체 급소인 머리를 강하게 가격하면 사망할 수 있다는 것은 누구나 인식 가능함(대법원 2000도2231 흉기의 종류·용법·공격 부위 기준 충족).',
+            '주변에서 벽돌을 찾아 집어 든 행위는 단순 우연이 아니라 공격 도구를 선택한 행위임.',
+            '예비적 활용: 설령 살인의 고의가 부정되더라도 벽돌로 머리를 가격한 행위는 명백히 상해치사죄(제259조 제1항)의 "상해"에 해당.'
+          ],
+          law: '형법 제250조 제1항(살인 미필적 고의, 2000도2231) / 예비적 제259조 제1항(상해치사)'
+        }
+      },
+      {
+        id: 'ev-20',
+        title: '20. 혈흔 (사건 현장)',
+        location: '사건 현장',
+        issues: ['쟁점1', '쟁점2'],
+        summary: '사건 현장에 모인 혈흔의 위치·형태 및 휴대전화·벽돌과의 거리',
+        rawFact: '사건 현장 바닥에 집중된 혈흔. 부서진 휴대전화가 떨어진 위치와 혈흔이 모인 위치, 벽돌의 위치 사이에 물리적 거리가 존재함.',
+        defense: {
+          meaning: '현장 배치도와 CCTV를 대조해 당시 두 사람의 충돌 위치와 동선을 재구성하는 객관적 자료.',
+          points: [
+            '혈흔만으로 살인의 고의를 판단할 수는 없으며, 몸싸움 과정에서 발생한 위치 변화를 설명하는 보조 자료로 활용.'
+          ],
+          law: '형법 제21조(충돌 상황 재구성) / 증거의 신빙성 교차 검증'
+        },
+        prosecutor: {
+          meaning: '실랑이 지점(휴대전화 낙하 위치)과 가격·쓰러진 지점(혈흔 집중 위치) 사이의 거리·시간 간격을 입증해 "즉각적 방어" 주장을 깨뜨리는 증거.',
+          points: [
+            '휴대전화가 떨어진 곳(실랑이 시작점)과 혈흔이 모인 곳(벽돌 가격 후 쓰러진 지점)이 떨어져 있다는 것은, 목 조르기 실랑이와 벽돌 가격 사이에 이동과 시간 간격이 있었음을 뜻함.',
+            '즉, 목이 졸리는 와중에 즉각 휘두른 정당방위가 아니라 침해가 끝난 뒤 이동하여 벽돌을 집어 가격한 공격행위임을 입증.'
+          ],
+          law: '형법 제21조 부정(침해의 현재성 및 방위행위 성립 부정)'
+        }
+      },
+      {
+        id: 'ev-21',
+        title: '21. 소견서 / 부검서 (새빛의료원 법의학과)',
+        location: '사건 현장',
+        issues: ['쟁점1', '쟁점2'],
+        summary: '사인: 두부 둔력손상에 의한 급성 경막외혈종 / 사망 추정 10. 23. 02:00~05:00 / 사고 경위란 "계단 추락" 기재',
+        rawFact: '새빛의료원 법의학과(2026. 10. 26., 담당의 이서현). 직접 사인: 두부 둔력손상에 의한 급성 경막외혈종 및 그에 따른 두개내압 상승·뇌압박 추정. 손상 직후 의식이 유지되다가 수 시간 내 악화 가능. 사망 추정 시각: 10. 23. 02:00~05:00(가격 후 4~7시간 생존). 신속한 신고·이송·치료가 생존 가능성을 높였을 수 있으나 단정은 어렵다고 기재. 단, 소견서의 "사고 경위"란에는 "야간자율학습 종료 후 학교 후문 계단에서 추락"이라고 적혀 있음.',
+        defense: {
+          meaning: '① 목 부위 압박 흔적 유무로 정당방위를 뒷받침하고, ② "학교 후문 계단 추락" 기재 및 구조 단정 불가를 근거로 인과관계와 살인 고의를 다투는 핵심 증거.',
+          points: [
+            '인과관계 다툼: 소견서 사고 경위란에 "학교 후문 계단에서 추락"이라고 적힌 점을 근거로, 벽돌 가격과 사인의 연결을 다툼(손상 직후 의식이 유지될 수 있다는 소견과 결합). 이 기재가 의도된 설정인지는 제작진 확인 필요.',
+            '살인 고의 부정: 손상 직후 의식이 유지될 수 있다는 소견을 통해, 당시 민서 입장에서는 지훈이 사망할 만한 치명상을 입었다고 인식할 수 없었음을 주장.',
+            '정당방위 연결: 목 부위 압박·손상 흔적 여부를 CCTV의 목 조르기 장면과 결합.'
+          ],
+          law: '형법 제17조(인과관계 다툼) / 형법 제250조(살인 고의 부정) / 형법 제21조(정당방위)'
+        },
+        prosecutor: {
+          meaning: '① 두부 둔력손상 = 벽돌 가격 부합, ② 수 시간 생존에도 구호 없이 방치·이탈 = 미필적 고의(결과회피행동 부재)를 입증하는 핵심 의학 증거.',
+          points: [
+            '공격 부위와 사인 일치: "머리에 가해진 둔력에 의한 급성 경막외혈종" 소견은 벽돌로 머리를 가격한 행위와 정확히 부합.',
+            '결과회피행동 부재(미필적 고의): 피해자는 밤 10시경 가격당한 후 다음 날 새벽 02:00~05:00까지 수 시간 동안 살아 있었음. 피고인이 119 신고 등 최소한의 구호 조치만 했어도 생존 가능성을 높일 수 있었으나 그대로 방치하고 떠남(선행행위로 인한 구호의무 위반·부작위 보충 구성 가능, 제18조).',
+            '"계단 추락" 기재 반박: 소견서의 사고 경위란은 부검 의뢰 당시 초기 전달받은 미확인 정보일 뿐이며, 실제 손상 기전(두부 둔력손상)은 현장 CCTV·벽돌·혈흔 감식 결과로 완벽히 입증된다고 정리.'
+          ],
+          law: '형법 제250조(미필적 고의 — 결과회피행동 없음) / 형법 제17조(인과관계) / 형법 제18조(부작위범 보충)'
+        }
+      },
+      {
+        id: 'ev-22',
+        title: '22. CCTV (CCTV실 노트북·모니터)',
+        location: 'CCTV실',
+        issues: ['쟁점1', '쟁점2', '쟁점3'],
+        summary: '만남 → 최초 접촉 → 몸싸움(목 조르기) → 벽돌 사용 → 즉시 현장 이탈의 전체 동선 및 사각지대',
+        rawFact: 'CCTV실 노트북·모니터의 현장 영상. 양측 가이드가 공통으로 제시한 분석 순서: ① 만남 이전(누가 먼저 왔고 어디서 왔나) → ② 최초 접촉(휴대전화 실랑이) → ③ 몸싸움(목 조르기 여부·지속시간) → ④ 벽돌 사용(집어 든 시점·횟수) → ⑤ 사건 이후(현장 이탈). 카메라마다 비추는 장소가 다르고 사각지대가 있음.',
+        defense: {
+          meaning: '지훈이 먼저 민서의 목을 조르는 치명적 공격(현재의 부당한 침해)을 가했음을 보여주는 객관적 영상 증거.',
+          points: [
+            '지훈이 민서의 목을 조르는 장면이 확인되면, 단순 실랑이를 넘어 생명에 위협을 느낀 급박한 방어 상황(싸움 중 정당방위 예외: 예상하기 어려운 과도한 공격의 등장)이었음을 입증.',
+            '반복 가격 장면이 없다면, 위험에서 벗어나기 위해 사용한 뒤 공포와 당황 속에서 현장을 벗어난 것으로 설명(제21조 제3항 야간 불안 상태의 공포·경악·당황과 연결).',
+            'CCTV 사각지대 구간에 대해서는 검사의 추측성 주장을 배제하고 "의심스러울 때는 피고인의 이익으로(In dubio pro reo)" 원칙 강조.'
+          ],
+          law: '형법 제21조 제1항~제3항(정당방위·과잉방위·야간 면책) / 대법원 2009도12958'
+        },
+        prosecutor: {
+          meaning: '① 피고인이 스스로 피해자를 찾아갔고, ② 쓰러진 피해자를 구호 없이 버려두고 즉시 이탈했음을 보여주는 직접 증거.',
+          points: [
+            '야간 과잉방위(제21조 제3항) 차단: 개인톡에는 약속 메시지가 없으므로, 피고인이 지훈이 있는 PC방으로 스스로 찾아갔다는 점은 CCTV 첫 등장 장면으로 입증해야 함. 스스로 만든 불안한 상태는 면책 사유로 보기 어려움.',
+            '미필적 고의 확정: 벽돌로 머리를 가격한 직후 쓰러진 피해자의 상태를 확인하거나 119에 신고하지 않고 곧바로 현장을 이탈함(결과회피행동 전무).',
+            '사각지대 처리 전략: 화면에 보이지 않는 사각지대 구간은 검사가 먼저 투명하게 밝히고, 그 구간은 억측이 아닌 현장 혈흔 위치·벽돌·소견서로만 객관적으로 메울 것.'
+          ],
+          law: '형법 제250조(살인의 미필적 고의) / 형법 제21조 제3항 배제'
+        }
+      },
+      {
+        id: 'ev-23',
+        title: '23. CCTV를 확인한 후 (재확인 정밀 분석)',
+        location: 'CCTV실',
+        issues: ['쟁점1', '쟁점2'],
+        summary: '휴대전화가 떨어지는 순간의 손·몸 위치 및 벽돌을 집어 들기 직전 목 조르기 종료 여부 정밀 분석',
+        rawFact: '현장 증거(휴대전화·벽돌·혈흔)를 확인한 뒤 CCTV를 재확인한 정밀 장면. ① 휴대전화가 떨어지는 순간 두 사람의 손과 몸 위치, ② 민서가 벽돌을 집어 든 시점과 그때 지훈이 목을 계속 조르고 있었는지 여부, ③ 가격 횟수 및 추가 공격 유무.',
+        defense: {
+          meaning: '지훈의 목 조르기 공격과 민서의 벽돌 방어행위 사이의 시간적·상황적 밀접성을 입증하는 자료.',
+          points: [
+            '지훈의 목 조르기 공격으로 인해 숨을 쉬기조차 힘든 급박한 상황에서 즉각적으로 이루어진 방어행위임을 강조.',
+            '벽돌 사용 후 지훈이 쓰러지자 추가 공격 없이 멈췄다면, 그 점을 들어 살인의 고의 부재와 상대적 최소침해를 주장.'
+          ],
+          law: '형법 제21조(침해의 현재성 및 상대적 최소침해) / 살인의 고의 부정'
+        },
+        prosecutor: {
+          meaning: '① 피고인이 먼저 휴대전화를 빼앗으려 손을 뻗은 "싸움"임을 입증하고, ② 벽돌 가격 시점의 "침해 현재성"을 무너뜨리는 핵심 승부처.',
+          points: [
+            '선제 공격(싸움의 자초): 휴대전화가 떨어지는 순간의 손 위치를 보면 피고인이 지훈의 휴대전화를 빼앗으려 먼저 손을 뻗었음이 드러남 → 지훈의 목 조르기는 피고인이 시작한 싸움 속의 반격이므로 정당방위·과잉방위 모두 성립 불가(대법원 2000도228).',
+            '침해의 현재성 부정: 피고인이 벽돌을 집어 들기 직전에 목 조르기가 이미 풀린 상태였는지 확인(휴대전화 낙하 지점과 혈흔 지점의 거리 결합). 이미 목 조르기가 끝난 뒤 벽돌을 들어 가격했다면 "현재의 침해"가 없으므로 방위행위 자체가 성립하지 않음.'
+          ],
+          law: '형법 제21조 부정(대법원 2000도228 싸움 법리 및 침해의 현재성 부정)'
+        }
+      },
+      {
+        id: 'wit-1',
+        title: '증인 1. 이친구 (민서의 유일한 단짝 친구)',
+        location: '증인',
+        issues: ['쟁점1', '쟁점3'],
+        summary: '평소 민서의 내향적 모습, 지훈의 괴롭힘, 그리고 단약 기간 중 교실에서의 폭력적 반응을 목격한 증인',
+        rawFact: '민서와 1학년 때부터 같은 반인 유일한 단짝 친구(고3). 직접 목격한 사실 3가지: ① 지훈의 평소 괴롭힘과 놀림, ② 사건 약 3주 전(단약 기간 중) 교실에서 벌어진 휴대전화 실랑이, ③ 그때 민서가 상대 학생의 팔을 거칠게 쳐내고 의자를 밀어 넘어뜨린 장면. (사건 당일 밤 공터 현장은 목격하지 못함).',
+        defense: {
+          meaning: '민서의 본래 온순한 성격과 최근의 비정상적 변화(기억 공백·당황), 그리고 지훈의 지속적인 괴롭힘을 증언할 핵심 우호 증인.',
+          points: [
+            '주신문 포인트: ① 민서의 평소 성격은 다툼 없이 극도로 소심했는가? ② 최근 평소와 전혀 다른 행동을 보인 적이 있는가? ③ 민서가 자신의 행동을 기억하지 못하거나 당황하는 모습을 본 적이 있는가? ④ 지훈의 괴롭힘으로 민서가 얼마나 힘들어했는가?',
+            '반대신문 방어: 교실 실랑이 상대가 "지훈"이 아니라 "한 학생"이라는 점을 분명히 하여 지훈에 대한 지속적 폭력성으로 연결되는 것을 차단.'
+          ],
+          law: '형법 제10조(심신장애 간접 입증) / 사건 배경(지속적 괴롭힘 피해)'
+        },
+        prosecutor: {
+          meaning: '단약 기간 중 피고인에게 실제로 폭력적 성향이 발현되었음을 입증하는 가장 신빙성 높은 증인.',
+          points: [
+            '주신문 포인트: ① 학생 상담 기록지대로 민서의 가장 가까운 유일한 친구인가?(신빙성 확보) ② 사건 약 3주 전(단약 기간) 교실에서 상대 학생의 팔을 거칠게 쳐내고 의자를 밀어 넘어뜨리는 폭력적 장면을 직접 보았는가? ③ 평소 민서라면 절대 하지 않을 폭력적 변화가 단약 기간에 실제로 나타난 것인가?',
+            '신문 주의사항: 상대 학생을 "지훈"으로 몰지 말 것(롤카드상 "한 학생"임 — 검사가 쓰는 것은 상대가 누구냐가 아니라 "단약 기간 중 폭력적 반응이 현실화되었다"는 사실 자체임). 또한 당시 유진 상태였는지나 약 때문인지 의학적 판단을 묻지 말 것.'
+          ],
+          law: '형법 제10조 제3항(단약의 위험이 사건 전에 이미 현실화됨을 입증)'
+        }
+      },
+      {
+        id: 'wit-2',
+        title: '증인 2. 한구독 (파프리카TV 유진세 열혈 시청자)',
+        location: '증인',
+        issues: ['전제', '쟁점1', '쟁점3'],
+        summary: '유진세 방송에 매주 1만 원씩 5회 후원하며 방송 속 유진의 거친 언행을 지켜본 시청자',
+        rawFact: '오프라인 친분은 없는 온라인 애청자. 라파은행 김민서 계좌로 1만 원 × 5회(합계 5만 원) 후원. 직접 시청한 방송 내용, 화면 속 유진의 거친 말투와 행동, 방송 분위기, 후원 사실만 진술 가능. 사건 전에는 민서와 유진의 관계를 몰랐음.',
+        defense: {
+          meaning: '방송 속 유진이 평소 민서와는 완전히 다른 말투·성격을 가진 별개 인격처럼 행동했음을 증언할 증인.',
+          points: [
+            '주신문/반대신문 포인트: ① 방송 속 유진의 모습은 내향적인 학생(민서)과 완전히 달랐는가? ② 방송에서 거친 말을 했더라도 실제로 사람을 살해할 사람이라고 판단할 수는 없지 않은가?(롤카드상 "방송만 보고 실제 해칠지 판단할 수 없다"는 답변 유도) ③ 오프라인에서 사건 현장을 본 적은 없지 않은가?'
+          ],
+          law: '형법 제10조(인격 분리 정황) / 형법 제250조(방송 언행 ≠ 살인의 고의)'
+        },
+        prosecutor: {
+          meaning: '후원금 계좌(예금주 김민서)와 유진세 채널을 연결하여 행위자를 특정하고 유진 상태의 거친 행동 양상을 입증하는 증인.',
+          points: [
+            '주신문 포인트: ① 파프리카TV 유진세 채널에 10. 2.~10. 30. 5차례 후원금을 보낸 사실이 있는가?(계좌 확인서와 결합해 유진세=김민서 확정) ② 방송에서 직접 목격한 유진의 거친 언행과 공격적 표현은 어떠했는가?',
+            '신문 금기사항: "실제로 사람을 해칠 사람이었나?", "살인의 고의를 추정할 수 있나?"는 절대 질문 금지! (롤카드상 "방송만 보고 판단할 수 없다"고 답하게 설정되어 있어 질문하는 순간 변호인에게 점수를 내주게 됨).'
+          ],
+          law: '행위자 특정(전제) / 유진 상태의 거친 행동 양상 확인'
+        }
+      },
+      {
+        id: 'wit-3',
+        title: '증인 3. 왕치료 (왕정신병원 정신건강의학과 주치의)',
+        location: '증인',
+        issues: ['전제', '쟁점3'],
+        summary: '중3 때부터 민서를 치료한 정신건강의학과 전문의 — 진단·처방 이력, 정체감·기억 증상, 복약 중단의 의미를 진술',
+        rawFact: '왕정신병원 정신건강의학과 전문의. 민서의 증상은 중1 때 시작되었고 중3부터 상담·약물치료를 담당함. 진단·처방 이력, 진료에서 확인한 정체감·기억 증상, 복약 중단의 일반적 의미를 진술할 수 있음. 사건 전에는 민서의 단약을 몰랐고 허락한 적도 없음. 롤카드에는 "사후 기억 공백과 당시의 판단·행동 통제 능력은 같은 개념이 아니다"라는 진술과 함께 "AI의 약을 끊어도 된다는 취지의 답변을 믿고"라는 문구가 들어 있음.',
+        defense: {
+          meaning: '형법 제10조의 심신장애(심신상실·심신미약)를 뒷받침할 유일한 의학 전문가 증인.',
+          points: [
+            '주신문 포인트: ① 민서는 어떤 이유로 처음 병원을 찾았고, 언제부터 어떤 치료를 받았나요? ② 어떤 약을 처방했고, 복용하는 동안 어떤 변화가 있었나요? ③ 진료에서 기억 공백이나 인격 전환(유진)과 관련된 증상이 확인되었나요? ④ 약을 임의로 중단하면 어떤 문제가 생길 수 있나요? ⑤ 그런 상태가 행동을 통제하는 능력에 영향을 줄 수 있나요?',
+            '한계도 먼저 묻기: 사건 당시 민서를 직접 진찰하지 않았다면, 사건 당시 상태에 대한 의견의 근거와 한계는 무엇이고 판단에 어떤 추가 자료가 필요한지 묻는다. 검사의 "기억 공백 ≠ 판단능력" 진술을 미리 맥락화하는 효과.',
+            '주의: 롤카드의 "AI가 끊어도 된다는 취지로 답했다"는 문구에 기대지 말 것. GPT 원문은 네 번 모두 임의 중단을 말렸으므로 검사가 원문으로 곧바로 반박한다. 진단명도 증인의 진술로만 확인한다.'
+          ],
+          law: '형법 제10조 제1항·제2항(심신상실·심신미약의 의학적 근거)'
+        },
+        prosecutor: {
+          meaning: '행위자 특정부터 단약의 자의성, 심신장애 부정까지 받아내는 핵심 증인.',
+          points: [
+            '받아낼 것: ① 민서와 유진은 한 사람에게 나타나는 다른 정체감 상태다(행위자 특정) ② 민서에게 진단과 증상의 원인을 설명했다(GPT 대화의 "병원에서 설명 들어서 알고 있어"와 연결) ③ 단약을 상의하거나 허락한 적이 없다(자의) ④ 사후 기억 공백과 당시의 판단·통제 능력은 같은 개념이 아니다(심신장애 부정 1단계).',
+            '신문 금기: "단약이 폭력을 일으켰나", "심신상실이었나"는 묻지 않는다. 롤카드상 "단정할 수 없다", "재판부가 판단한다"로 답하게 되어 있다.',
+            '롤카드의 "AI의 \'끊어도 된다\'는 취지 답변을 믿고" 문구는 GPT 기록과 다르다. 이 대목이 나오면 GPT 원문으로만 논증한다.'
+          ],
+          law: '행위자 특정(전제) / 형법 제10조 제3항(원자행), 대법원 92도999'
+        }
+      }
+    ];
+
+    /******************************************************************
+     * 3. 쟁점별 주장 가이드 데이터 (검사·변호사 튜터 주장 가이드 + 증거 분석 문서)
+     ******************************************************************/
+    const STAGES = [
+      { stage: '전제 · 행위자', pros: "방송인 '유진세'와 피고인 김민서는 같은 사람이다", def: '후원 기록은 방송과 실제 인물을 잇는 자료일 뿐, 정신 상태나 사건 당시 행동을 직접 증명하지 못한다', law: '—', ev: ['ev-4', 'ev-2', 'ev-17', 'ev-16', 'wit-3'], tab: 'overview' },
+      { stage: '① 구성요건', pros: '벽돌로 머리를 칠 때 사망 가능성을 인식했다(미필적 고의). 예비적으로 상해치사', def: '사망 결과만으로 살인의 고의를 단정할 수 없다 → 상해치사·폭행치사의 범위', law: '제250조 제1항, 제13조, 제259조 제1항, 대법원 2000도2231', ev: ['ev-8', 'ev-19', 'ev-21', 'ev-20', 'ev-22'], tab: 'issue1' },
+      { stage: '② 위법성', pros: '정당방위·과잉방위가 아니라 싸움 중의 공격이다(최소한 상당성 초과)', def: '목 조르기라는 현재의 부당한 침해에 대한 방어였다 → 정당방위, 예비적으로 과잉방위', law: '제21조 제1항~제3항, 대법원 2000도228, 2009도12958', ev: ['ev-23', 'ev-18', 'ev-20', 'ev-22'], tab: 'issue2' },
+      { stage: '③ 책임', pros: '유진 상태에서도 판단 능력이 있었고, 없었더라도 스스로 단약해 그 상태를 불렀다', def: '행위 당시 심신상실이었고, 그 상태를 고의·과실로 초래하지 않았다 → 원자행 불성립, 차선으로 심신미약', law: '제10조 제1항~제3항, 대법원 92도999', ev: ['ev-10', 'ev-8', 'ev-5', 'wit-3', 'wit-1', 'ev-15'], tab: 'issue3' }
+    ];
+
+    const GUIDE = {
+      overview: {
+        title: '전체 전략',
+        sub: '두 튜터 가이드의 출발점과 최종 주장 구조',
+        prosecutor: {
+          goal: '사망 결과에 이르게 된 행위가 어떤 범죄의 구성요건에 해당하는지, 방어행위라는 설명이 정당화될 수 있는지, 심신장애를 이유로 책임을 면할 수 있는지를 단계적으로 입증한다. 구성요건에서는 가능하면 살인죄, 위법성에서는 상당성이 없거나 과잉방위, 책임에서는 원인에 있어서 자유로운 행위를 근거로 책임을 인정한다.',
+          flow: ['살인의 고의 입증(예비적으로 상해치사·폭행치사)', '정당방위의 상당성 부정 · 과잉방위', '심신장애 상태의 원인자성 입증', '책임 인정'],
+          steps: [
+            '주위적 주장: 행위의 방법과 당시 인식·의사를 종합하면 살인의 고의가 인정되므로 살인죄가 성립한다.',
+            '예비적 주장: 살인의 고의가 인정되지 않더라도 폭행 또는 상해의 고의와 사망 결과에 관한 요건이 충족되어 폭행치사 또는 상해치사 등이 성립한다.',
+            '위법성 주장: 방어의 필요성이 있었다고 하더라도 대응수단과 강도가 상당성을 넘었으므로 정당방위가 아니라 과잉방위에 해당한다.',
+            '책임 주장: 심신장애 상태가 인정되더라도 피고인은 그 상태와 위험한 행동을 예견할 수 있었고, 고의 또는 과실로 그 상태를 초래했으므로 원인에 있어서 자유로운 행위가 인정된다.',
+            '결론: 구성요건 해당성, 위법성, 책임의 각 단계에서 증거와 법리를 연결해 범죄 성립과 책임 인정의 근거를 제시한다.'
+          ],
+          points: [
+            '전제(행위자 특정): 계좌 거래내역 확인서(예금주 김민서) → 한구독 → 왕치료 순서로 "유진세 = 김민서"를 먼저 고정한다.',
+            '논고 순서: 누가 → 왜 → 알고 있었나 → 어떻게 → 정당했나 → 책임질 수 있나.'
+          ],
+          evidence: ['ev-4', 'ev-2', 'wit-2', 'wit-3']
+        },
+        defense: {
+          goal: '사망 결과 자체를 부정하기보다, 주관적 구성요건과 위법성·책임 단계에서 범죄 성립 또는 책임의 범위를 최대한 제한한다. 구성요건에서는 살인죄보다 상해치사·폭행치사로 평가될 여지를, 위법성에서는 정당방위를, 책임에서는 심신장애와 원인에 있어서 자유로운 행위의 성립 여부를 다툰다.',
+          flow: ['살인의 고의 부정', '상해·폭행 고의에 따른 결과범 검토', '현재의 부당한 침해에 대한 방어행위', '과잉방위 예비적 대응', '심신상실 · 원인자성 부정'],
+          steps: [
+            '주위적 주장: 살인의 고의가 증명되지 않으므로 살인죄가 아니라 상해치사 또는 폭행치사 등으로 평가해야 한다.',
+            '위법성 주장: 현재의 부당한 침해에 대한 방어행위였고, 당시 상황에 비추어 상당성이 인정되므로 정당방위가 성립한다.',
+            '예비적 주장: 정당방위의 정도를 넘었다고 보더라도 당시 급박한 침해와 행위자의 상황을 고려해 과잉방위의 법적 효과를 검토해야 한다.',
+            '책임 주장: 행위 당시 심신상실 상태였고, 그 상태를 스스로 고의·과실로 초래했다고 볼 수 없어 원인에 있어서 자유로운 행위가 성립하지 않는다.',
+            '차선적 주장: 심신상실이 받아들여지지 않더라도 심신미약 여부와 그 법적 효과를 검토해야 한다.'
+          ],
+          points: [
+            '불리한 증거(벽돌로 머리 가격, 스스로 단약, 유진의 적대감)까지 포함해 사건 전체를 가장 설득력 있게 설명하는 것이 목표다.',
+            '최종 변론에서 반드시 답할 세 질문: ① 민서는 지훈을 죽이려고 벽돌을 사용했는가? ② 지훈의 공격으로부터 자신을 보호하려 했는가? ③ 사건 당시 자신의 행동을 인식하고 통제할 수 있었는가?'
+          ],
+          table: [
+            ['살인의 고의', '지훈을 죽이려는 의도가 있었는가?', 'CCTV, 벽돌, 개인 대화'],
+            ['미필적 고의', '사망 가능성을 알면서도 이를 용인했는가?', 'CCTV, 가격 횟수, 당시 상황'],
+            ['정당방위', '지훈의 현재 공격을 막기 위한 행동이었는가?', 'CCTV, 부검서, 혈흔'],
+            ['과잉방위', '방어의 정도가 필요한 범위를 넘어섰는가?', 'CCTV, 부검서, 현장 감식'],
+            ['심신상실', '사물을 변별하거나 의사를 결정할 능력이 없었는가?', '진료 기록, GPT 대화, 왕치료'],
+            ['심신미약', '위 능력이 부족한 상태였는가?', '진료 기록, 복용 이력, 왕치료'],
+            ['인과관계', '민서의 행위가 지훈의 사망을 발생시켰는가?', '부검서, 벽돌 감식자료']
+          ],
+          evidence: ['ev-22', 'ev-21', 'ev-10', 'wit-3']
+        }
+      },
+
+      issue1: {
+        title: '① 구성요건 해당성 — 살인의 고의',
+        sub: '핵심은 객관적 요소가 아니라 행위 당시의 인식과 의사(주관적 구성요건)',
+        law: '형법 제250조 제1항(살인) · 제13조(고의) · 제259조 제1항(상해치사) · 제262조(폭행치사) · 대법원 2000도2231',
+        prosecutor: {
+          goal: '살인죄를 주위적으로, 상해치사·폭행치사를 예비적으로 주장한다. 사망 결과만 반복하지 말고 행위 당시의 인식과 의사를 뒷받침하는 간접사실을 연결한다.',
+          steps: [
+            '객관적 위험성: 단단하고 무거운 벽돌로 머리를 가격했다 — 벽돌·소견서(두부 둔력손상)',
+            '사망 가능성의 인식: 행위의 방법·강도·반복성·가격 부위·사용한 물건·중단 여부로 추론(2000도2231)',
+            '동기와 경위: 10. 15. 개인톡 → 단톡방 사진 → "런닝맨" → 사물함 포스트잇 → 일기장의 살해 언급',
+            '결과회피행동 없음: 가격 뒤 구호 없이 떠났고, 피해자는 수 시간 살아 있었다 — CCTV·소견서',
+            '예비적: 살인의 고의가 흔들리면 폭행·상해의 고의와 사망 결과의 관련성으로 결과적 가중범을 주장'
+          ],
+          points: [
+            '단일한 정황만으로 결론 내리지 말고, 여러 간접사실이 서로 부합한다는 점을 종합해 설명한다.',
+            '"밀치거나 제압하려 했다"는 반론에는 실제 행위의 위험성과 당시 인식에 비추어 그 설명이 합리적인지 반박한다.',
+            '폭행치사와 상해치사는 폭행의 인식·의욕, 상해의 고의 인정 여부로 구분한다. 녹취에서는 폭행치사로 통일하자는 수업상 제안도 있었으므로 죄명은 사건기록과 수업 지침으로 확정한다.',
+            '인과관계·결과 귀속은 녹취에서 자세히 다루지 않았으므로 별도 법률 검토가 필요하다.'
+          ],
+          quote: '행위의 객관적 위험성뿐 아니라 행위 당시의 인식과 의사를 종합하면, 피고인은 자신의 행위가 상대방의 생명을 침해할 수 있음을 인식하면서도 이를 감수했다고 볼 수 있습니다. 따라서 살인의 고의가 인정되어야 하며, 적어도 폭행 또는 상해의 고의와 사망 결과 사이의 관련성은 인정됩니다.',
+          evidence: ['ev-19', 'ev-21', 'ev-22', 'ev-8', 'ev-17', 'ev-16', 'ev-13', 'ev-20']
+        },
+        defense: {
+          goal: '사망이라는 결과와 살인의 고의는 구별된다. 살인의 고의를 부정하고, 구성요건 해당성이 인정되더라도 상해치사 또는 폭행치사의 범위에서 평가되도록 한다.',
+          steps: [
+            '주위적: 살인의 고의가 증명되지 않았으므로 살인죄로 평가할 수 없다',
+            '행위 당시의 인식과 의사 구분: 사망 의사가 아니라 다툼·급박한 방어 상황에서의 폭행·상해 인식이었다',
+            '상해치사 vs 폭행치사: 상해를 가하려는 고의인지, 폭행의 고의에 그쳤는지 사실관계에 맞춰 선택',
+            '인과관계·결과 귀속 검토: 소견서 사고 경위란의 "학교 후문 계단 추락" 기재, 손상 직후 의식 유지 가능 소견'
+          ],
+          points: [
+            '행위의 강도·횟수·도구·가격 부위·전후 언행은 고의를 추론하는 간접사실이다. 실제 기록에서 확인되는 자료만 쓴다.',
+            '벽돌은 미리 준비한 흉기가 아니라 현장에서 집어 든 물건이고, 사건 전 개인톡에 살해 예고나 계획이 없다.',
+            '불리한 증거도 설명한다: 유진의 적대감과 일기장의 살해 언급은 동기가 될 수 있지만, 그것이 곧 민서의 살인 고의를 증명하지는 않는다.',
+            '살인의 고의가 합리적인 의심 없이 증명되었는지를 다툰다.'
+          ],
+          quote: '사망이라는 중대한 결과가 발생했다는 점과 행위자에게 살인의 고의가 있었다는 점은 구별되어야 합니다. 행위 당시의 구체적 정황을 종합하면 살인의 고의를 인정하기 어렵고, 설령 구성요건 해당성이 인정되더라도 그 평가는 상해치사 또는 폭행치사의 범위에서 이루어져야 합니다.',
+          evidence: ['ev-22', 'ev-19', 'ev-21', 'ev-17', 'ev-8', 'wit-2']
+        },
+        clash: [
+          { q: '벽돌로 머리를 친 행위', pros: '위험한 물건으로 머리를 가격 → 흉기의 종류·용법·공격 부위상 미필적 고의(2000도2231)', def: '현장에서 급히 집어 든 물건, 사용 목적은 목 조르기에서 벗어나는 것 — 횟수와 가격 이후 행동을 함께 봐야 한다' },
+          { q: '일기장 속 유진의 살해 언급', pros: '범행 전부터 "죽여버리고 싶네"를 거듭 적음 → 동기와 적의', def: '감정 표현이지 계획이 아니다. 유진의 적대감이 곧 민서의 살인 고의는 아니다' },
+          { q: '가격 후 현장 이탈', pros: '구호 없이 떠남, 피해자는 수 시간 생존 → 결과 용인(결과회피행동 없음)', def: '손상 직후 의식이 유지될 수 있다는 소견 → 치명상이라고 인식하기 어려웠다' },
+          { q: '소견서 사고 경위란 "계단 추락"', pros: '의뢰 당시 전달받은 정보일 뿐, 소견 자체는 두부 둔력손상으로 벽돌과 부합', def: '벽돌 가격과 사인의 연결(인과관계)을 다툴 근거' }
+        ]
+      },
+
+      issue2: {
+        title: '② 위법성 — 정당방위·과잉방위',
+        sub: '① 현재의 부당한 침해 ② 방위하기 위한 행위 ③ 상당한 이유 — 그리고 싸움의 법리',
+        law: '형법 제21조 제1항(정당방위) · 제2항(과잉방위) · 제3항(야간 등 불안 상태의 과잉방위) · 대법원 2000도228 · 2009도12958',
+        note: '정리자 메모 — 검사 측 노선 선택: 수업 녹취는 "정당방위가 아니라 과잉방위"를 가장 명확하게 주문하지만, 과잉방위를 인정하는 순간 변호인이 제21조 제3항(야간·불안 상태의 공포·경악·흥분·당황 → 벌하지 않음)을 꺼낼 수 있습니다. 증거 분석 문서는 "싸움이므로 정당방위·과잉방위 모두 불성립"을 주장합니다. 어느 쪽을 주위적으로 두고 어느 쪽을 예비적으로 둘지 팀에서 먼저 정하세요.',
+        prosecutor: {
+          goal: '정당방위 성립을 부정한다. 요건을 하나씩 반박하고, 싸움의 자초성을 세우며, 방어 상황이 일부 있었더라도 수단과 강도가 상당성을 넘었다고 주장한다.',
+          steps: [
+            '요건별 반박: ① 현재성 — 벽돌을 들기 직전 목 조르기가 이미 풀렸나 ② 방위 목적 — 분노·보복이 개입했나 ③ 상당성 — 수단·강도·횟수·부위·지속시간',
+            '싸움의 자초성: 휴대전화가 떨어지는 순간 손 위치로 피고인이 먼저 손을 뻗었음을 보이면 목 조르기는 싸움 속의 반격(2000도228)',
+            '거리와 시간 간격: 휴대전화 낙하 지점(실랑이)과 혈흔 지점(쓰러진 곳)이 떨어져 있으면 즉각적 방어가 아니다',
+            '최소한 과잉방위: 방어의 필요성과 수단의 상당성은 별개 — 목 졸림에서 벗어나는 데 필요한 수준을 넘어 머리를 벽돌로 가격',
+            '제21조 제3항 차단: 과잉방위가 성립하지 않으면 제3항도 따질 수 없고, 피고인이 스스로 찾아가 만든 상황은 면책 사유로 보기 어렵다(CCTV 첫 등장 장면으로 입증)'
+          ],
+          points: [
+            '사후적으로 쉬운 대안을 상정하지 말고 행위 당시의 구체적 상황을 기준으로 논증한다.',
+            '"상대 공격이 갑자기 과도한 수단으로 바뀌었다"는 주장에는 그 전환의 시점·실재 여부·위험의 정도를 검증한다.',
+            '방위의사가 "순수해야 한다"는 식으로 단순화하지 않는다.',
+            '녹취가 언급한 싸움 중 정당방위의 네 가지 예외는 문장이 불명확하다. 강의자료로 정확한 요건을 확인한 뒤 반박한다.',
+            'CCTV 재확인 장면은 관찰한 사실과 추측을 나눠 제시한다. 화면에 보이는 사실만으로 논증해야 신빙성을 지킨다.'
+          ],
+          quote: '상대방의 공격으로 방어의 필요성이 있었다고 하더라도, 그 사실만으로 모든 대응행위가 정당화되는 것은 아닙니다. 당시 침해를 중단시킬 수 있는 범위와 실제 사용한 수단·강도·가격 부위·반복 여부를 비교하면, 행위는 필요한 한도를 넘어섰으므로 정당방위가 아니라 과잉방위로 평가되어야 합니다.',
+          evidence: ['ev-23', 'ev-18', 'ev-20', 'ev-22', 'ev-19']
+        },
+        defense: {
+          goal: '정당방위를 주위적으로 주장하고, 정도를 넘었다는 반론에는 예비적으로 과잉방위(제21조 제2항·제3항)로 대응한다.',
+          steps: [
+            '① 현재의 부당한 침해: 지훈의 목 조르기가 행위 당시 진행 중이었다 — 시점·강도·지속시간을 CCTV와 부검서(목 부위 압박 흔적)로',
+            '② 방위하기 위한 행위: 자기 법익 보호와 관련된 행위다. 방위의사가 순수한 방어 목적만이어야 하는 것은 아니다',
+            '③ 상당성(상대적 최소침해): 시간·공간의 급박한 제약, 실제로 고를 수 있었던 수단, 사용 횟수·부위·중단 시점',
+            '싸움 중 예외: 예상하기 어려운 과도한 공격(목 조르기)의 등장, 소극적 방어에도 계속된 일방적 공격(2009도12958)',
+            '예비적 과잉방위: 급박성·공포·혼란·야간 공터 → 제21조 제2항(감경·면제)·제3항(벌하지 않음)'
+          ],
+          points: [
+            '"도망갈 수 있었는데 왜 안 갔나"만으로 정당방위가 부정되지는 않는다는 수업 설명을 참고하되, 법리 적용은 따로 확인한다.',
+            '상대의 공격이 멈춘 뒤에도 추가 공격이 있었는지, 방어행위가 언제 끝났는지를 타임라인으로 먼저 제시한다.',
+            '네 가지 예외 사정은 녹취 문장이 일부 불명확하므로 완결된 요건 목록으로 단정하지 말고 강의자료로 확인한다.',
+            '과거의 괴롭힘·학폭 기록은 배경일 뿐 "현재의 침해"를 대신하지 못한다. 부검서의 목 부위 손상만으로 누가 누구의 목을 졸랐는지도 단정할 수 없다.'
+          ],
+          quote: '당시 상대방의 공격은 현재 진행 중인 중대한 침해였고, 행위자는 그 침해를 중단시키기 위해 즉각 대응했습니다. 당시의 급박성, 대응에 사용할 수 있었던 수단, 공격의 지속 여부를 함께 보면 이 행위는 법익을 지키기 위한 방어행위로서 상당성이 인정되어야 합니다.',
+          evidence: ['ev-22', 'ev-23', 'ev-21', 'ev-20', 'ev-18', 'ev-19', 'ev-12']
+        },
+        clash: [
+          { q: '누가 먼저 손을 댔나', pros: '피고인이 비밀이 담긴 지훈의 휴대전화를 빼앗으려 먼저 손을 뻗음 → 자초한 싸움', def: '휴대전화가 파손됐다는 사실만으로 누가 먼저 공격했는지 알 수 없다' },
+          { q: '벽돌을 들 때 목 조르기는 계속 중이었나', pros: '이미 풀린 뒤라면 현재의 침해가 없어 방위행위 자체가 성립하지 않는다', def: '지훈의 공격과 민서의 방어 사이에 시간적·상황적 연결이 있었다' },
+          { q: '수단의 상당성', pros: '목 졸림을 벗어나는 데 필요한 정도를 넘어 머리를 벽돌로 가격', def: '목 조르기는 생명에 대한 위협 — 급박한 순간 다른 수단을 고를 여유가 없었다' },
+          { q: '밤, 인적 드문 공터', pros: '피고인이 스스로 찾아가 만든 상황 → 제3항 면책 불가', def: '야간 불안 상태에서의 공포·경악·당황 → 제21조 제3항' }
+        ]
+      },
+
+      issue3: {
+        title: '③ 책임 — 심신장애와 원인에 있어서 자유로운 행위',
+        sub: '정신질환이 있다는 사실 ≠ 심신장애 인정 / 스스로 그 상태를 불렀는가',
+        law: '형법 제10조 제1항(심신상실) · 제2항(심신미약) · 제3항(위험 발생을 예견하고 자의로 심신장애를 야기) · 대법원 92도999',
+        note: '자료 충돌 주의 — 왕치료 롤카드에는 "AI의 \'약을 끊어도 된다\'는 취지 답변을 믿고"라고 적혀 있지만, GPT 대화 원문에서 GPT는 네 번 모두 임의 중단을 말렸습니다. 양측 모두 원문 기준으로 논증하세요.',
+        prosecutor: {
+          goal: '두 단계로 막는다. 먼저 유진 상태에서도 사물변별·의사결정 능력이 있었다고 주장하고, 그래도 심신장애가 인정되면 피고인이 위험을 예견할 수 있었는데도 스스로 약을 끊어 그 상태를 불렀다고 주장한다(제10조 제3항).',
+          steps: [
+            '1단계 심신장애 부정: 유진은 조건까지 붙여 자기 판단을 적었고("한 번만 더 선 넘으면"), 가격 직후 곧바로 현장을 떠났다',
+            '왕치료: "사후 기억 공백과 당시의 판단·행동 통제 능력은 같은 개념이 아니다" — 진단명이나 존재만으로 책임이 부정되지 않는다',
+            '2단계 원자행(예비적) — 원인행위 당시 책임능력: 차분하게 묻고 대안을 고르는 GPT 대화 자체가 증거',
+            '자의성: GPT의 네 차례 만류, 주치의 무허락에도 스스로 단약 — 달력으로 약 3주 단약 특정',
+            '예견가능성: "병원에서 설명 들어서 알고 있어", 일기장에서 유진의 살해 언급을 읽고 "제발 그러지 마", 이친구가 본 교실 폭력 → 과실에 의한 원자행도 포함(92도999)'
+          ],
+          points: [
+            '심신상실에 이를 정도였는지, 심신미약에 그쳤는지는 전문가 의견과 사건 당시 행동을 종합해 다툰다.',
+            '과거 유사한 상황의 폭력·통제력 상실 사례가 있었는지, 피고인이 이를 알았는지, 주변의 경고·제지가 있었는지 확인한다.',
+            '녹취 예시("술을 마시면 난폭해지는 것을 알면서 다시 술을 마신 경우")를 단약에 대응시키려면 과거 경험과 예견가능성의 구체적 증거가 필요하다.',
+            '사건 전후의 대화·이동·회피 행동은 정신상태를 추론하는 자료지만, 의미를 과장하지 않고 전체 맥락에서 평가한다.',
+            '왕치료에게 "단약이 폭력을 일으켰나", "심신상실이었나"는 묻지 않는다(롤카드상 "단정할 수 없다", "재판부가 판단한다").'
+          ],
+          quote: '피고인이 사건 당시 심신장애 상태였다고 하더라도, 과거의 반복된 경험과 주변의 경고를 통해 특정 상황에서 자신의 통제력이 저하되고 폭력적 행동을 할 수 있음을 예견할 수 있었습니다. 그럼에도 스스로 해당 상황을 초래했으므로 원인에 있어서 자유로운 행위가 인정되어 책임을 면할 수 없습니다.',
+          evidence: ['ev-10', 'ev-8', 'ev-5', 'wit-3', 'wit-1', 'ev-15', 'ev-14', 'ev-9', 'ev-7']
+        },
+        defense: {
+          goal: '행위 당시 심신상실을 주위적으로 주장하고, 그 상태를 민서가 고의·과실로 초래했다고 볼 수 없어 원자행이 성립하지 않는다고 다툰다. 차선으로 심신미약을 주장한다.',
+          steps: [
+            '심신상실(주위적): 진료기록·전문가 의견·행동의 일관성·기억과 인식 상태·사건 전후 언행으로 행위 당시 책임능력 없음을 뒷받침',
+            '정신적 어려움이나 감정적 흥분이 있었다는 정도를 넘어, 행위 당시 책임능력이 없었다는 점까지 보여야 한다',
+            '원자행 부정: 민서는 자신의 심신장애나 그로 인한 위험한 행동을 사전에 예견할 수 없었다',
+            '단약 경위: 범행 준비가 아니라 수업 중 멍함(부작용)과 "요즘 괜찮아진 것 같다"는 호전 착각에서 비롯됐다',
+            '심신미약(차선): 유죄가 인정되더라도 임의적 감경 — 심신상실과 법적 효과를 혼동하지 않는다'
+          ],
+          points: [
+            '정신질환이 있다는 사실과 심신장애가 인정된다는 사실은 다르다. 단약이나 기억 공백만으로 자동 인정되지 않으므로 의학 자료로 보강한다.',
+            '왕치료가 사건 당시 민서를 직접 진찰하지 않았다면 의견의 근거와 한계를 먼저 묻고, 약물 중단 이후 증상과 사건 당시 상태의 의학적 관련성을 확인한다.',
+            'GPT의 답변은 의료진의 진단을 대신하지 않는다. 대화 기록은 민서의 인식과 결정 과정을 보여주는 자료로만 쓴다.',
+            '이친구의 진술과 교사 일지를 비교해 평소 모습과 행동 변화를 교차 확인한다(교사는 진단 전문가가 아님).',
+            '과거 유사 행동이 있었는지, 민서가 이를 인식했는지, 특정 인물·상황·물질과 위험한 행동의 연관성을 알았는지 따진다.'
+          ],
+          quote: '행위 당시 심신장애 상태가 인정된다고 하더라도, 그 상태를 행위자가 고의 또는 과실로 초래했다고 볼 수 있는지는 별개의 문제입니다. 과거의 경험과 당시의 인식, 위험을 예견할 수 있었던 사정을 입증하지 못한다면 원인에 있어서 자유로운 행위로 책임을 돌릴 수 없습니다.',
+          evidence: ['wit-3', 'ev-5', 'ev-10', 'ev-8', 'ev-9', 'wit-1', 'ev-15', 'ev-2', 'wit-2', 'ev-7']
+        },
+        clash: [
+          { q: '기억 공백', pros: '사후 기억 공백과 당시의 판단·통제 능력은 다르다(왕치료)', def: '기억 공백·인격 전환은 사물변별·의사결정 능력을 판단하는 자료다' },
+          { q: 'GPT 대화', pros: '네 번의 만류를 거스르고 "단정할 수 없다" 한 구절만 골라 들음 → 자의·예견가능성', def: '멍함과 호전 착각에서 나온 미숙한 판단이지 범행 준비가 아니다' },
+          { q: '무엇을 예견할 수 있었나', pros: '일기장에서 유진의 살해 언급을 읽고 "누굴 해치겠다느니... 제발 그러지 마"라고 답함 → 남을 해칠 위험을 구체적으로 앎', def: '민서가 안 것은 막연한 기억 공백("요즘은 비는 시간이 별로 없는 것 같아")이다' },
+          { q: '과실에 의한 원자행', pros: '92도999: 위험을 예견할 수 있었는데도 자의로 심신장애를 일으킨 경우 — 과실도 포함, 범행 의도까지 입증할 필요 없음', def: '예견가능성을 입증하지 못하면 원자행으로 책임을 돌릴 수 없다' }
+        ]
+      }
+    };
+
+    /******************************************************************
+     * 4. 공방 · 최종 변론/논고 · 체크리스트 · 자료 모순 데이터
+     ******************************************************************/
+    const REBUTTALS = [
+      { issue: '쟁점3', claim: '범행은 유진이 했고 민서는 기억이 없다 — 심신상실(제10조 제1항)', basis: '왕치료의 진단, 기억 공백', reply: '왕치료도 기억 공백과 당시 판단·통제 능력은 다르다고 본다. 유진은 조건을 붙여 자기 판단을 적었고, 범행 뒤 곧바로 떠났다. 심신장애가 인정돼도 제10조 제3항(원자행)이다.', ev: ['wit-3', 'ev-8', 'ev-22'] },
+      { issue: '쟁점3', claim: '민서는 AI 말을 믿고 약을 끊었을 뿐이다', basis: '왕치료 롤카드의 "AI의 \'끊어도 된다\' 취지 답변", GPT의 "단정할 수 없다"', reply: '기록상 GPT는 네 번 모두 임의 중단을 말렸다. "단정할 수 없다" 바로 뒤에 "중단해도 안전하다는 뜻은 아니다"가 이어진다.', ev: ['ev-10', 'wit-3'] },
+      { issue: '쟁점3', claim: '단약은 약 부작용(멍함) 때문이지 범행 준비가 아니다', basis: 'GPT 대화의 단약 동기', reply: '판례상 과실에 의한 원자행도 포함되므로 범행 의도까지 입증할 필요가 없다(92도999).', ev: ['ev-10'] },
+      { issue: '쟁점3', claim: '예견 대상은 \'남을 해칠 위험\'인데, 민서는 막연한 기억 공백만 알았다', basis: 'GPT 대화("요즘은 비는 시간이 별로 없는 것 같아")', reply: '일기장에서 민서는 유진의 살해 언급을 읽고 "누굴 해치겠다느니... 제발 그러지 마"라고 답했다.', ev: ['ev-8', 'ev-10'] },
+      { issue: '쟁점2', claim: '목이 졸리는 상황의 방어였다 — 정당방위·과잉방위, 야간 면책(제21조 제3항)', basis: 'CCTV 목 조르기 장면, 대법원 2009도12958(일방적 공격에 대한 저항)', reply: '피고인이 먼저 휴대전화를 빼앗으려 한 싸움이다(2000도228). 과잉방위가 아니면 제3항도 적용되지 않는다. 피고인이 스스로 찾아갔다.', ev: ['ev-23', 'ev-18', 'ev-22'] },
+      { issue: '쟁점1', claim: '사인은 벽돌이 아니다 — 소견서상 \'계단 추락\'', basis: '소견서 \'사고 경위\' 란', reply: '사고 경위는 전달받은 정보다. 소견 자체는 \'두부 둔력손상\'으로 벽돌 가격과 맞는다. CCTV·벽돌 감식으로 기전을 잇는다.', ev: ['ev-21', 'ev-19', 'ev-22'] },
+      { issue: '쟁점1', claim: '우연히 집은 벽돌로 한 번 쳤다 — 살인 고의 없음', basis: 'CCTV, 소견서', reply: '위험한 물건, 머리 공격, 일기장의 살해 언급, 구호 없는 이탈로 미필적 고의가 인정된다(2000도2231). 예비적으로 상해치사를 둔다.', ev: ['ev-19', 'ev-8', 'ev-22', 'ev-21'] },
+      { issue: '쟁점3', claim: '교실 사건의 상대는 지훈이 아니다', basis: '이친구 롤카드(\'한 학생\')', reply: '검사는 상대를 특정하지 않는다. 쓰는 것은 \'단약 기간 중 폭력적 반응\'이라는 사실뿐이다.', ev: ['wit-1'] },
+      { issue: '쟁점2', claim: 'CCTV에 결정적 장면이 보이지 않는다', basis: 'CCTV 사각지대', reply: '사각지대를 먼저 밝히고, 그 구간은 혈흔·벽돌·소견서로 설명한다.', ev: ['ev-22', 'ev-20', 'ev-19', 'ev-21'] },
+      { issue: '전제', claim: '증인 진술은 믿기 어렵다', basis: '—', reply: '이친구는 민서의 유일한 친구(상담 기록지)인데도 불리한 장면을 진술했다. 한구독의 진술은 계좌 확인서와 맞는다.', ev: ['wit-1', 'ev-15', 'wit-2', 'ev-4'] }
+    ];
+
+    const CLOSING = {
+      prosecutor: {
+        label: '⚔️ 검사 최종 논고',
+        intro: '누가 → 왜 → 알고 있었나 → 어떻게 → 정당했나 → 책임질 수 있나',
+        steps: [
+          { t: '행위자', b: '계좌 확인서(예금주 김민서, 한구독 후원금)·위키·왕치료로 유진세와 피고인이 한 사람임을 확정한다.', ev: ['ev-4', 'ev-2', 'wit-2', 'wit-3'] },
+          { t: '동기', b: '10. 15. 21:32 지훈의 개인톡 → 21:46 단톡방 사진 → 21:47 \'런닝맨\' → 사물함 포스트잇 → 일기장 "개죽여버리고 싶네"로 분노가 쌓인 경위를 보인다.', ev: ['ev-17', 'ev-16', 'ev-13', 'ev-8'] },
+          { t: '위험의 인식', b: 'GPT 대화(진단을 알았고 네 번 만류받음)와 일기장(유진의 살해 언급에 "제발 그러지 마")으로, 민서가 위험을 알면서 약을 끊고 다시 먹지 않았음을 보인다. 달력으로 단약 3주를 특정한다.', ev: ['ev-10', 'ev-8', 'ev-5'] },
+          { t: '만남과 싸움', b: 'CCTV로 피고인이 스스로 지훈을 찾아갔음을 보인다. 재확인 장면과 부서진 휴대전화로 피고인이 먼저 손을 뻗은 싸움이었음을 보인다 → 정당방위·과잉방위 부정.', ev: ['ev-22', 'ev-23', 'ev-18'] },
+          { t: '가격과 이탈', b: '벽돌·혈흔·소견서·CCTV로 머리를 친 뒤 구호 없이 떠났음을 보인다. 피해자는 수 시간 살아 있었다 → 살인의 미필적 고의.', ev: ['ev-19', 'ev-20', 'ev-21', 'ev-22'] },
+          { t: '책임', b: '유진 상태에서도 판단 능력이 있었고(1단계), 없었더라도 원자행이다(2단계) → 제10조에 따른 감면을 배제한다.', ev: ['ev-8', 'wit-3', 'ev-10'] },
+          { t: '구형', b: '살인죄(제250조 제1항), 예비적으로 상해치사(제259조 제1항). 위키대로 2009년생이면 범행 당시 18세 미만이다. 특정강력범죄법 제4조로 무기형도 20년 유기징역으로 완화되고, 판결 때 19세 미만이면 부정기형(장기 15년·단기 7년 이내)이 된다. 구형량은 이 상한을 전제로 정한다.', ev: [] }
+        ]
+      },
+      defense: {
+        label: '🛡️ 변호인 최종 변론',
+        intro: '불리한 증거까지 포함해 사건 전체를 가장 설득력 있게 설명한다',
+        steps: [
+          { t: '지속적인 갈등이 있었다', b: '금전 갈등에서 시작된 관계가 학교폭력·사진 유포·조롱으로 악화되었음을 보인다. 사건은 갑자기 생긴 것이 아니라 갈등이 누적된 결과다. 다만 과거 갈등은 배경일 뿐 정당방위의 직접 근거는 아니다.', ev: ['ev-11', 'ev-12', 'ev-13', 'ev-16', 'ev-17'] },
+          { t: '정신적 상태가 행동에 영향을 미쳤을 가능성', b: '약물 치료 사실, 단약 시점, 이후 증상, 유진의 존재와 행동을 시간 순서대로 정리하고, 사건 당시 민서가 자기 행동을 인식·통제할 수 있었는지 따진다(제10조). 기억 공백만으로는 부족하므로 의학적 자료로 뒷받침한다.', ev: ['ev-5', 'ev-1', 'ev-10', 'ev-8', 'ev-9', 'ev-7', 'wit-2', 'wit-3'] },
+          { t: '자신을 보호하기 위한 방어행위', b: 'CCTV에서 지훈이 먼저 목을 조르는 행동을 했는지, 부검서의 목 부위 손상과 맞는지 확인하고 정당방위 요건을 검토한다. 방어의 정도가 지나쳤다면 제21조 제2항(과잉방위)을 검토한다.', ev: ['ev-22', 'ev-21', 'ev-20', 'ev-19', 'ev-18'] },
+          { t: '사망 결과만으로 살인의 고의를 단정할 수 없다', b: '사전 살해 계획이 있었는지, 사건 직전 대화와 현장 영상 속 행동을 비교한다. 벽돌의 사용 목적이 살해였는지 목 조르기에서 벗어나는 것이었는지 따지고, 고의가 합리적 의심 없이 증명되었는지 다툰다.', ev: ['ev-22', 'ev-19', 'ev-21', 'ev-17', 'wit-2'] },
+          { t: '반드시 답할 세 질문', b: '① 민서는 지훈을 죽이려고 벽돌을 사용했는가? ② 지훈의 공격으로부터 자신을 보호하기 위해 행동했는가? ③ 사건 당시 자신의 행동을 인식하고 통제할 수 있었는가?', ev: [] }
+        ]
+      }
+    };
+
+    const CHECKLIST = {
+      prosecutor: [
+        '행위의 위험성, 반복성, 사용 도구, 가격 부위, 행위 중단 여부가 살인의 고의를 뒷받침하는가?',
+        '사건 전후의 발언이나 행동에서 사망 결과에 대한 인식·용인을 추론할 수 있는가?',
+        '상대방의 공격이 실제로 현재 진행 중이었는지, 종료된 시점은 언제인지 확인되는가?',
+        '사건이 상호 공격이 오간 싸움이었음을 보여주는 증거가 있는가?',
+        '방어행위의 수단과 강도가 침해를 막는 데 필요한 범위를 넘었다고 볼 근거가 있는가?',
+        '상대방의 공격이 멈춘 뒤에도 추가 가격이나 공격이 이어졌는가?',
+        '심신상실을 인정하기 어려운 사건 당시의 인식·판단·행동 자료가 있는가?',
+        '행위자가 과거 유사한 폭력행동이나 통제력 상실을 경험했고 이를 알고 있었는가?',
+        '행위자가 자신의 상태와 위험을 예견할 수 있었음을 보여주는 진술·메시지·주변인 증언이 있는가?'
+      ],
+      defense: [
+        '사건 직전부터 사망 결과 발생까지의 시간 순서가 정확히 정리되어 있는가?',
+        '상대방의 공격이 현재 진행 중이었는지, 특히 목 조름의 시점·강도·지속시간이 확인되는가?',
+        '행위자가 싸움을 중단하거나 방어적으로 행동한 정황이 있는가?',
+        '말·행동·도구 사용·가격 부위·횟수는 살인의 고의와 양립하는가, 다른 고의의 가능성을 남기는가?',
+        '방어행위가 침해를 막기 위한 최소한의 대응이었다고 볼 자료가 있는가?',
+        '공격이 끝난 뒤에도 행위가 계속되었는가?',
+        '정신감정·진료기록·목격자 진술 등으로 사건 당시 심신상태를 입증할 수 있는가?',
+        '행위자가 자신의 상태와 위험한 행동 가능성을 사전에 예견했음을 보여주는 과거 사례가 있는가?'
+      ]
+    };
+
+    const CONFLICTS = [
+      { item: '사고 장소', a: '소견서: "학교 후문 계단에서 추락"', b: '롤카드·사건 개요: 밤 10시경 PC방 앞 공터, 벽돌 가격', impact: '사인과 벽돌의 연결을 다투는 근거가 된다', ev: ['ev-21', 'ev-19'] },
+      { item: 'AI 답변', a: '왕치료 롤카드: AI의 "약을 끊어도 된다"는 취지 답변을 믿음', b: 'GPT 기록: 네 번 모두 임의 중단을 말림', impact: '기록대로면 검사에게 유리하다. 배우가 롤카드대로 진술하면 혼선이 생긴다', ev: ['ev-10', 'wit-3'] },
+      { item: '사망 시각', a: '사건 개요: 약 2시간 뒤 사망', b: '소견서: 10. 23. 02:00~05:00(가격 4~7시간 뒤)', impact: '결과회피·구조 가능성 논증의 시간이 달라진다', ev: ['ev-21'] },
+      { item: '개인톡 날짜·순서', a: '사건 개요: 사진 유포 며칠 뒤 밤 10시에 채널을 발견하고 그날 만남', b: '코코아톡: 10. 15. 21:32 채널 발견 → 21:46 사진 유포, 사건은 10. 22.', impact: '동기 형성과 만남 경위의 시간선이 흔들린다', ev: ['ev-17', 'ev-16'] },
+      { item: '만남 약속', a: '힌트 카드: 개인톡에서 만날 장소·시각 확인', b: '코코아톡: 약속 메시지 없음(\'추가 개인톡 대사 조정 예정\' 표시)', impact: '피고인이 만남을 주도했다는 주장의 근거가 약해진다', ev: ['ev-17', 'ev-22'] },
+      { item: '학년·반', a: '학생 상담 기록지: 2학년 3반', b: '단톡방 \'3학년 2반\', 이친구 롤카드 \'고3\'', impact: '상담 기록지의 신빙성이 공격받는다', ev: ['ev-15', 'ev-16', 'wit-1'] },
+      { item: '피고인 나이', a: '위키: 2009년생(범행 당시 18세 미만)', b: '소견서: 지훈 2008년생 18세, 같은 반 설정', impact: '소년 특례 적용 여부와 구형량이 달라진다', ev: ['ev-2', 'ev-21'] }
+    ];
+
+    /******************************************************************
+     * 5. 앱 상태 · 공통 유틸
+     ******************************************************************/
+    const ISSUE_LABEL = { '전제': '전제 · 행위자', '쟁점1': '① 구성요건', '쟁점2': '② 위법성', '쟁점3': '③ 책임' };
+    const ISSUE_TAB = { '전제': 'overview', '쟁점1': 'issue1', '쟁점2': 'issue2', '쟁점3': 'issue3' };
+    const TAB_ISSUE = { overview: '전제', issue1: '쟁점1', issue2: '쟁점2', issue3: '쟁점3' };
+    const LOCS = [['민서의 방', '🏠'], ['교실', '🏫'], ['사건 현장', '🚧'], ['CCTV실', '📹'], ['증인', '🎙️']];
+    const QUICK_KEYWORDS = ['원자행', '목 조르기', 'GPT', '2000도228', '제21조', '미필적 고의', '단약', '한구독', '계단 추락', 'CCTV'];
+    const ALIASES = [
+      ['원자행', '원인에있어서자유로운행위', '원인자성', '제10조제3항', '92도999'],
+      ['소견서', '부검서', '부검'],
+      ['단약', '약물중단', '복약중단', '약을끊', '임의중단'],
+      ['코코아톡', '카톡', '단톡방', '개인톡', '대화방'],
+      ['미필적고의', '살인의고의', '2000도2231'],
+      ['싸움', '2000도228', '자초'],
+      ['목조르기', '목을조르', '목조름', '목졸림', '목을졸'],
+      ['심신장애', '심신상실', '심신미약', '제10조'],
+      ['정당방위', '과잉방위', '제21조'],
+      ['한구독', '후원'],
+      ['계단추락', '계단에서추락', '사고경위']
+    ];
+    const EV = Object.fromEntries(WIKI_DATA.map((d) => [d.id, d]));
+    const state = { role: 'both', loc: 'ALL', issue: 'ALL', itab: 'overview', view: 'wiki', closing: 'prosecutor', open: new Set() };
+
+    const store = {
+      get(k, d) { try { const v = localStorage.getItem('lawimpact-wiki:' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+      set(k, v) { try { localStorage.setItem('lawimpact-wiki:' + k, JSON.stringify(v)); } catch (e) {} }
+    };
+    const $ = (s) => document.querySelector(s);
+    const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const norm = (s) => String(s || '').replace(/\s+/g, '').toLowerCase();
+    const shortTitle = (id) => (EV[id] ? EV[id].title.replace(/^\d+\.\s*/, '').replace(/^증인\s*\d\.\s*/, '증인 ') : id);
+
+    let toastTimer;
+    function toast(msg) {
+      let t = $('#appToast');
+      if (!t) { t = document.createElement('div'); t.id = 'appToast'; t.className = 'app-toast'; document.body.appendChild(t); }
+      t.textContent = msg; t.classList.add('show');
+      clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    /* 검색어 → 별칭까지 펼친 검색 단위 */
+    let searchTerms = [];
+    function buildTerms(q) {
+      return q.split(/\s+/).filter(Boolean).map((raw) => {
+        const n = norm(raw);
+        const group = ALIASES.find((g) => g.some((a) => a === n));
+        return { raw, alts: group ? [...new Set([n, ...group])] : [n] };
+      });
+    }
+    const matchText = (text, terms) => { const h = norm(text); return terms.every((t) => t.alts.some((a) => h.includes(a))); };
+    let hlRegex = null;
+    function buildHighlight(terms) {
+      const parts = [];
+      terms.forEach((t) => t.alts.forEach((a) => {
+        if (!a) return;
+        parts.push([...a].map((ch) => ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('\\s*'));
+      }));
+      parts.sort((a, b) => b.length - a.length);
+      hlRegex = parts.length ? new RegExp('(' + parts.join('|') + ')', 'gi') : null;
+    }
+    function hl(text) {
+      const safe = esc(text);
+      if (!hlRegex) return safe;
+      // 태그·엔티티를 건드리지 않도록 텍스트 조각에만 적용
+      return safe.split(/(&[a-z#0-9]+;)/gi).map((seg) => (seg.startsWith('&') ? seg : seg.replace(hlRegex, '<mark class="hl">$1</mark>'))).join('');
+    }
+    const fmt = (text) => hl(text).replace(/\n/g, '<br>');
+
+    function evChips(ids) {
+      return (ids || []).filter((id) => EV[id]).map((id) =>
+        `<button type="button" class="evidence-link-chip" data-ev="${id}">📎 ${esc(shortTitle(id))}</button>`).join('');
+    }
+
+    /******************************************************************
+     * 6. 증거 위키
+     ******************************************************************/
+    function itemText(d) {
+      return [d.title, d.summary, d.rawFact, d.note, d.location, d.issues.map((i) => ISSUE_LABEL[i]).join(' '),
+        d.defense.meaning, d.defense.points.join(' '), d.defense.law,
+        d.prosecutor.meaning, d.prosecutor.points.join(' '), d.prosecutor.law].join(' ');
+    }
+    function renderLocChips() {
+      const counts = {}; WIKI_DATA.forEach((d) => { counts[d.location] = (counts[d.location] || 0) + 1; });
+      $('#locFilterRow').innerHTML = `<button class="chip ${state.loc === 'ALL' ? 'active' : ''}" data-loc="ALL">전체 (${WIKI_DATA.length})</button>` +
+        LOCS.map(([l, ic]) => `<button class="chip ${state.loc === l ? 'active' : ''}" data-loc="${l}">${ic} ${l} (${counts[l] || 0})</button>`).join('');
+    }
+    function setLocFilter(loc) { state.loc = loc; renderLocChips(); renderWiki(); }
+    function setIssueFilter(issue) {
+      state.issue = issue;
+      document.querySelectorAll('#issueFilterRow .chip').forEach((c) => c.classList.toggle('active', c.dataset.issue === issue));
+      renderWiki();
+    }
+    function clearSearch() { $('#wikiSearch').value = ''; renderWiki(); $('#wikiSearch').focus(); }
+    function sidePanel(side, d) {
+      const p = d[side];
+      const label = side === 'defense' ? '🛡️ 변호사 활용 전략' : '⚔️ 검사 활용 전략';
+      return `<div class="strategy-panel ${side}">
+          <div class="panel-header ${side}"><span>${label}</span></div>
+          <div class="panel-meaning">${fmt(p.meaning)}</div>
+          <ul class="strategy-list">${p.points.map((x) => `<li>${fmt(x)}</li>`).join('')}</ul>
+          <div class="law-box">⚖️ <strong>법리 연결</strong> · ${fmt(p.law)}</div>
+        </div>`;
+    }
+    function wikiCard(d) {
+      const open = state.open.has(d.id);
+      const sides = state.role === 'both' ? ['prosecutor', 'defense'] : [state.role];
+      return `<article class="wiki-card ${open ? 'open' : ''}" id="card-${d.id}" data-id="${d.id}">
+        <div class="wiki-card-header" data-toggle="${d.id}" role="button" tabindex="0" aria-expanded="${open}">
+          <div class="wiki-title-group">
+            <div class="badge-group"><span class="loc-badge">${esc(d.location)}</span>
+              ${d.issues.map((i) => `<span class="issue-tag" data-issue-tag="${i}">${ISSUE_LABEL[i]}</span>`).join('')}
+              ${d.note ? '<span class="warn-tag">확인 필요</span>' : ''}</div>
+            <div class="wiki-card-title">${hl(d.title)}</div>
+            <div class="wiki-card-summary">${hl(d.summary)}</div>
+          </div>
+          <span class="toggle-arrow">▼</span>
+        </div>
+        <div class="wiki-card-body">
+          <div class="fact-box"><strong>📄 원본에서 확인된 내용</strong>${fmt(d.rawFact)}</div>
+          ${d.note ? `<div class="note-box">⚠️ ${fmt(d.note)}</div>` : ''}
+          <div class="role-grid ${state.role === 'both' ? 'both-mode' : ''}">${sides.map((s) => sidePanel(s, d)).join('')}</div>
+          <div class="jump-row">${d.issues.map((i) => `<button type="button" class="jump-guide-btn" data-jump="${ISSUE_TAB[i]}">🧭 ${ISSUE_LABEL[i]} 주장 가이드</button>`).join('')}</div>
+        </div>
+      </article>`;
+    }
+    function guideHits(terms) {
+      const hits = [];
+      Object.entries(GUIDE).forEach(([key, g]) => {
+        ['prosecutor', 'defense'].forEach((side) => {
+          if (state.role !== 'both' && state.role !== side) return;
+          const s = g[side];
+          const txt = [g.title, g.sub, g.law, g.note, s.goal, (s.flow || []).join(' '), s.steps.join(' '), s.points.join(' '), s.quote,
+            (g.clash || []).map((c) => [c.q, c[side === 'prosecutor' ? 'pros' : 'def']].join(' ')).join(' ')].join(' ');
+          if (matchText(txt, terms)) hits.push({ key, side });
+        });
+      });
+      return hits;
+    }
+    function renderWiki() {
+      const q = $('#wikiSearch').value.trim();
+      $('#clearSearchBtn').style.display = q ? 'block' : 'none';
+      searchTerms = buildTerms(q); buildHighlight(searchTerms);
+      const list = WIKI_DATA.filter((d) => (state.loc === 'ALL' || d.location === state.loc)
+        && (state.issue === 'ALL' || d.issues.includes(state.issue))
+        && (!searchTerms.length || matchText(itemText(d), searchTerms)));
+      if (searchTerms.length && list.length <= 4) list.forEach((d) => state.open.add(d.id));
+      const box = $('#wikiListContainer');
+      box.innerHTML = list.length ? list.map(wikiCard).join('')
+        : `<div class="empty-box">🔎 조건에 맞는 증거가 없습니다.<br><small>다른 키워드를 쓰거나 장소·쟁점 필터를 "전체"로 바꿔 보세요.</small></div>`;
+      $('#resultCountText').textContent = `${list.length}개 항목${q ? ` · "${q}" 검색` : ''}`;
+      const gh = $('#guideHitBox');
+      if (searchTerms.length) {
+        const hits = guideHits(searchTerms);
+        gh.innerHTML = hits.length ? `<span class="gh-label">🧭 주장 가이드에서도 찾음</span>` + hits.map((h) =>
+          `<button type="button" class="gh-chip ${h.side}" data-jump="${h.key}">${GUIDE[h.key].title.split(' — ')[0]} · ${h.side === 'prosecutor' ? '검사' : '변호사'}</button>`).join('') : '';
+        gh.style.display = hits.length ? 'flex' : 'none';
+      } else { gh.style.display = 'none'; gh.innerHTML = ''; }
+    }
+    function toggleCard(id) {
+      const el = document.getElementById('card-' + id); if (!el) return;
+      const open = !state.open.has(id);
+      open ? state.open.add(id) : state.open.delete(id);
+      el.classList.toggle('open', open);
+      el.querySelector('.wiki-card-header').setAttribute('aria-expanded', open);
+    }
+    function toggleAllCards() {
+      const ids = [...document.querySelectorAll('#wikiListContainer .wiki-card')].map((e) => e.dataset.id);
+      const allOpen = ids.length && ids.every((id) => state.open.has(id));
+      ids.forEach((id) => (allOpen ? state.open.delete(id) : state.open.add(id)));
+      renderWiki();
+    }
+    function goToEvidence(id) {
+      if (!EV[id]) return;
+      $('#wikiSearch').value = ''; state.loc = 'ALL'; state.issue = 'ALL';
+      renderLocChips(); setIssueFilter('ALL');
+      state.open.add(id);
+      switchView('wiki', { evId: id });
+      renderWiki();
+      requestAnimationFrame(() => {
+        const el = document.getElementById('card-' + id);
+        if (!el) return;
+        window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - headerH() - 10, behavior: 'smooth' });
+        el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1400);
+      });
+    }
+
+    /******************************************************************
+     * 7. 쟁점별 주장 가이드
+     ******************************************************************/
+    function setIssueTab(tab, push = true) {
+      state.itab = tab;
+      document.querySelectorAll('.issue-tab-btn').forEach((b) => b.classList.toggle('active', b.dataset.itab === tab));
+      renderGuide();
+      if (push) pushRoute();
+      window.scrollTo({ top: 0 });
+    }
+    function guideSide(side, g) {
+      const s = g[side];
+      const label = side === 'defense' ? '🛡️ 변호사의 논지' : '⚔️ 검사의 논지';
+      return `<div class="strategy-panel ${side}">
+        <div class="panel-header ${side}"><span>${label}</span></div>
+        <p class="goal-text">${fmt(s.goal)}</p>
+        ${s.flow ? `<div class="flow-chain">${s.flow.map((f) => `<span>${hl(f)}</span>`).join('<i>→</i>')}</div>` : ''}
+        <div class="sub-h">${g === GUIDE.overview ? '최종 주장 구조' : '논지 전개 순서'}</div>
+        <ol class="step-list">${s.steps.map((x) => `<li>${fmt(x)}</li>`).join('')}</ol>
+        <div class="sub-h">놓치면 안 되는 포인트</div>
+        <ul class="strategy-list">${s.points.map((x) => `<li>${fmt(x)}</li>`).join('')}</ul>
+        ${s.table ? `<div class="sub-h">최종적으로 검토할 법적 판단</div><div class="mini-table">${s.table.map((r) => `<div class="mt-row"><b>${esc(r[0])}</b><span>${esc(r[1])}</span><em>${esc(r[2])}</em></div>`).join('')}</div>` : ''}
+        ${s.quote ? `<div class="quote-box ${side}">💬 ${fmt(s.quote)}</div>` : ''}
+        <div class="sub-h">이 논지에 쓰는 증거</div>
+        <div>${evChips(s.evidence)}</div>
+      </div>`;
+    }
+    function renderGuide() {
+      const g = GUIDE[state.itab];
+      const sides = state.role === 'both' ? ['prosecutor', 'defense'] : [state.role];
+      let html = `<div class="guide-card"><div class="guide-title">${esc(g.title)}</div><div class="guide-sub">${esc(g.sub)}</div>
+        ${g.law ? `<div class="law-line">⚖️ ${esc(g.law)}</div>` : ''}</div>`;
+      if (state.itab === 'overview') {
+        html += `<div class="guide-card"><div class="guide-title sm">📊 단계별 입증 구조 한눈에</div>
+          ${STAGES.map((st) => `<div class="stage-row">
+            <button type="button" class="stage-name" data-jump="${st.tab}">${esc(st.stage)} ›</button>
+            ${sides.includes('prosecutor') ? `<div class="stage-side prosecutor"><b>검사</b>${esc(st.pros)}</div>` : ''}
+            ${sides.includes('defense') ? `<div class="stage-side defense"><b>변호사</b>${esc(st.def)}</div>` : ''}
+            ${st.law !== '—' ? `<div class="stage-law">⚖️ ${esc(st.law)}</div>` : ''}
+            <div>${evChips(st.ev)}</div></div>`).join('')}</div>`;
+      }
+      if (g.note) html += `<div class="note-box big">⚠️ ${esc(g.note)}</div>`;
+      html += `<div class="role-grid ${state.role === 'both' ? 'both-mode' : ''}">${sides.map((s) => guideSide(s, g)).join('')}</div>`;
+      if (g.clash) {
+        html += `<div class="guide-card"><div class="guide-title sm">⚔️ 정면 충돌 지점</div>` + g.clash.map((c) => `
+          <div class="clash-item"><div class="clash-q">${esc(c.q)}</div>
+            <div class="clash-grid ${state.role === 'both' ? 'both-mode' : ''}">
+              ${sides.includes('prosecutor') ? `<div class="clash-side prosecutor"><b>검사</b>${esc(c.pros)}</div>` : ''}
+              ${sides.includes('defense') ? `<div class="clash-side defense"><b>변호사</b>${esc(c.def)}</div>` : ''}
+            </div></div>`).join('') + `</div>`;
+      }
+      const issue = TAB_ISSUE[state.itab];
+      const rel = WIKI_DATA.filter((d) => d.issues.includes(issue));
+      html += `<div class="guide-card"><div class="guide-title sm">📚 이 쟁점에 태그된 증거 (${rel.length})</div>${evChips(rel.map((d) => d.id))}
+        <button type="button" class="jump-guide-btn" data-filter-issue="${issue}">위키에서 이 쟁점만 모아 보기 ›</button></div>`;
+      $('#issueGuideContainer').innerHTML = html;
+    }
+
+    /******************************************************************
+     * 8. 공방 · 최종 변론/논고 빌더 · 체크리스트 · 자료 모순
+     ******************************************************************/
+    function renderRebuttals() {
+      $('#rebuttalListContainer').innerHTML = REBUTTALS.map((r, i) => `
+        <div class="rebuttal-item">
+          <div class="rb-head"><span class="rb-num">${i + 1}</span><span class="issue-tag" data-jump="${ISSUE_TAB[r.issue]}">${ISSUE_LABEL[r.issue]}</span></div>
+          <div class="rb-block defense"><b>🛡️ 변호인 주장</b>${esc(r.claim)}<small>근거: ${esc(r.basis)}</small></div>
+          <div class="rb-block prosecutor"><b>⚔️ 검사 재반박</b>${esc(r.reply)}</div>
+          <div>${evChips(r.ev)}</div>
+        </div>`).join('');
+    }
+    let closingSel = store.get('closingSel', {});
+    function renderClosing() {
+      const side = state.role === 'both' ? state.closing : state.role;
+      const c = CLOSING[side];
+      const sel = closingSel[side] || c.steps.map(() => true);
+      $('#closingBuilderContainer').innerHTML = `
+        ${state.role === 'both' ? `<div class="seg">${['prosecutor', 'defense'].map((s) => `<button type="button" class="seg-btn ${s} ${s === side ? 'active' : ''}" data-closing="${s}">${CLOSING[s].label}</button>`).join('')}</div>` : ''}
+        <p class="guide-sub">${esc(c.intro)} · 체크한 단계만 개요로 복사됩니다.</p>
+        ${c.steps.map((st, i) => `<div class="builder-step ${sel[i] ? '' : 'off'}">
+          <label class="bs-head"><input type="checkbox" data-step="${i}" ${sel[i] ? 'checked' : ''}/><span class="bs-num">${i + 1}</span><b>${esc(st.t)}</b></label>
+          <p>${esc(st.b)}</p><div>${evChips(st.ev)}</div></div>`).join('')}
+        <button type="button" class="copy-btn" id="copyClosingBtn">📋 선택한 흐름을 개요로 복사</button>`;
+      document.querySelectorAll('#closingBuilderContainer [data-step]').forEach((cb) => cb.addEventListener('change', () => {
+        sel[+cb.dataset.step] = cb.checked; closingSel[side] = sel; store.set('closingSel', closingSel); renderClosing();
+      }));
+      $('#copyClosingBtn').addEventListener('click', () => {
+        const lines = [c.label.replace(/^\S+\s/, '') + ' 개요', ''];
+        let n = 0;
+        c.steps.forEach((st, i) => { if (!sel[i]) return; n++;
+          lines.push(`${n}. ${st.t}`, `   ${st.b}`);
+          if (st.ev.length) lines.push(`   증거: ${st.ev.map(shortTitle).join(', ')}`);
+          lines.push(''); });
+        copyText(lines.join('\n'));
+      });
+    }
+    function copyText(text) {
+      const done = () => toast('개요를 복사했습니다');
+      if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done)); }
+      else fallbackCopy(text, done);
+    }
+    function fallbackCopy(text, done) {
+      const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) { toast('복사하지 못했습니다. 길게 눌러 직접 복사하세요.'); }
+      ta.remove();
+    }
+    let checks = store.get('checks', {});
+    function renderChecklist() {
+      const sides = state.role === 'both' ? ['prosecutor', 'defense'] : [state.role];
+      $('#checklistContainer').innerHTML = sides.map((side) => {
+        const items = CHECKLIST[side];
+        const done = items.filter((_, i) => checks[side + i]).length;
+        return `<div class="check-group"><div class="panel-header ${side}"><span>${side === 'prosecutor' ? '⚔️ 검사 튜터' : '🛡️ 변호사 튜터'}</span><span class="check-count">${done} / ${items.length}</span></div>
+          ${items.map((t, i) => `<div class="check-item ${checks[side + i] ? 'checked' : ''}" data-check="${side + i}" role="checkbox" aria-checked="${!!checks[side + i]}" tabindex="0">
+            <span class="check-box-ui">${checks[side + i] ? '✓' : ''}</span><span>${esc(t)}</span></div>`).join('')}</div>`;
+      }).join('') + `<button type="button" class="reset-link" id="resetChecksBtn">↺ 체크 초기화</button>`;
+      $('#resetChecksBtn').addEventListener('click', () => { checks = {}; store.set('checks', checks); renderChecklist(); });
+    }
+    function renderConflicts() {
+      $('#conflictListContainer').innerHTML = CONFLICTS.map((c, i) => `
+        <div class="conflict-item"><div class="cf-head"><span class="rb-num">${i + 1}</span><b>${esc(c.item)}</b></div>
+          <div class="cf-ab"><div><em>자료 A</em>${esc(c.a)}</div><div><em>자료 B</em>${esc(c.b)}</div></div>
+          <div class="cf-impact">⚖️ 공방 영향 · ${esc(c.impact)}</div>
+          <div>${evChips(c.ev)}</div></div>`).join('');
+    }
+
+    /******************************************************************
+     * 9. 화면 전환 · 역할 모드 · 라우팅
+     ******************************************************************/
+    function headerH() { return $('.top-header').offsetHeight; }
+    function syncHeaderSpace() { document.body.style.paddingTop = headerH() + 12 + 'px'; }
+    const scrollMemo = {};
+    function switchView(view, opts = {}) {
+      if (state.view !== view) scrollMemo[state.view] = window.scrollY;
+      state.view = view;
+      document.querySelectorAll('.section-view').forEach((s) => s.classList.toggle('active', s.id === 'view-' + view));
+      document.querySelectorAll('.nav-item').forEach((b) => b.classList.toggle('active', b.dataset.view === view));
+      if (view === 'guide') renderGuide();
+      if (!opts.evId) window.scrollTo({ top: opts.keepScroll ? (scrollMemo[view] || 0) : 0 });
+      if (opts.push !== false) pushRoute(opts.evId);
+    }
+    function setRoleMode(role) {
+      state.role = role; store.set('role', role);
+      document.querySelectorAll('.role-btn').forEach((b) => b.classList.toggle('active', b.dataset.role === role));
+      document.body.dataset.role = role;
+      renderWiki(); renderGuide(); renderClosing(); renderChecklist();
+    }
+    function routeHash(evId) {
+      if (evId) return '#' + evId;
+      return state.view === 'guide' ? '#guide-' + state.itab : '#' + state.view;
+    }
+    function pushRoute(evId) {
+      const h = routeHash(evId);
+      try { if (location.hash !== h) history.pushState({ h }, '', h); } catch (e) {}
+    }
+    function applyRoute(hash) {
+      const h = (hash || '').replace(/^#/, '');
+      if (EV[h]) { goToEvidence(h); return; }
+      const m = h.match(/^guide-(overview|issue[123])$/);
+      if (m) { state.itab = m[1]; setIssueTab(m[1], false); switchView('guide', { push: false }); return; }
+      if (['wiki', 'guide', 'rebuttal', 'conflicts'].includes(h)) { switchView(h, { push: false, keepScroll: true }); return; }
+      switchView('wiki', { push: false });
+    }
+    window.addEventListener('popstate', () => applyRoute(location.hash));
+
+    /******************************************************************
+     * 10. 이벤트 위임 · 초기화
+     ******************************************************************/
+    document.addEventListener('click', (e) => {
+      const t = e.target.closest('[data-ev],[data-jump],[data-toggle],[data-issue-tag],[data-loc],[data-filter-issue],[data-check],[data-closing],[data-kw]');
+      if (!t) return;
+      if (t.dataset.ev) { goToEvidence(t.dataset.ev); return; }
+      if (t.dataset.issueTag) { e.stopPropagation(); setIssueFilter(t.dataset.issueTag); return; }
+      if (t.dataset.jump) { setIssueTab(t.dataset.jump, false); switchView('guide'); return; }
+      if (t.dataset.toggle) { toggleCard(t.dataset.toggle); return; }
+      if (t.dataset.loc) { setLocFilter(t.dataset.loc); return; }
+      if (t.dataset.filterIssue) { goFilteredWiki(t.dataset.filterIssue); return; }
+      if (t.dataset.check) { checks[t.dataset.check] = !checks[t.dataset.check]; store.set('checks', checks); renderChecklist(); return; }
+      if (t.dataset.closing) { state.closing = t.dataset.closing; renderClosing(); return; }
+      if (t.dataset.kw) { $('#wikiSearch').value = t.dataset.kw; renderWiki(); }
+    });
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-toggle],[data-check]')) { e.preventDefault(); e.target.click(); }
+    });
+    function goFilteredWiki(issue) {
+      $('#wikiSearch').value = ''; state.loc = 'ALL'; renderLocChips(); setIssueFilter(issue); switchView('wiki');
+    }
+
+    function init() {
+      updateResolutionAdaptation();
+      $('#quickKwRow').innerHTML = QUICK_KEYWORDS.map((k) => `<button type="button" class="chip kw" data-kw="${esc(k)}">#${esc(k)}</button>`).join('');
+      renderLocChips();
+      state.role = store.get('role', 'both');
+      document.querySelectorAll('.role-btn').forEach((b) => b.classList.toggle('active', b.dataset.role === state.role));
+      document.body.dataset.role = state.role;
+      renderWiki(); renderGuide(); renderRebuttals(); renderClosing(); renderChecklist(); renderConflicts();
+      syncHeaderSpace();
+      if (window.ResizeObserver) new ResizeObserver(syncHeaderSpace).observe($('.top-header'));
+      window.addEventListener('resize', syncHeaderSpace);
+      if (location.hash) applyRoute(location.hash);
+      else { try { history.replaceState({ h: '#wiki' }, '', '#wiki'); } catch (e) {} }
+    }
+    init();
+  </script>
+</body>
+</html>
